@@ -48,51 +48,57 @@ def same_length(x,y):
 ##a='AATTCCAAC'
 ##b='ATTTCAACC'
 ##print(subword_dist(a,b))
-f=open('cDomain.txt','r')
-##print(f.readline().strip('\n'))
-ndomain=[]
-i=0
-for line in f :
-##    print (line)
-    if 'AAAA'  in line:
-        #print(line)
-        continue
-    elif 'CCC' in line:
-        continue
-    elif 'GGG' in line :
-        continue
-    elif 'TTTT' in line:
-        continue
-    elif line.count('C')+line.count('G')<4 or line.count('C')+line.count('G')>8:
-        continue
-    else :
-        ndomain.append(line.strip('\n'))
-        i=i+1
-#hamming distance >7 & subword
+##f=open('cDomain.txt','r')
+####print(f.readline().strip('\n'))
+##ndomain=[]
+##i=0
+##for line in f :
+####    print (line)
+##    if 'AAAA'  in line:
+##        #print(line)
+##        continue
+##    elif 'CCC' in line:
+##        continue
+##    elif 'GGG' in line :
+##        continue
+##    elif 'TTTT' in line:
+##        continue
+##    elif line.count('C')+line.count('G')<4 or line.count('C')+line.count('G')>8:
+##        continue
+##    else :
+##        ndomain.append(line.strip('\n'))
+##        i=i+1
+###hamming distance >7 & subword
+##f.close()
+##seed='ACTCTCCACTCA'
+##for dom in ndomain :
+##    if hamming_distance(seed,dom)<4:
+##        ndomain.remove(dom)
+##ndomain.append(seed)
+##shuffle(ndomain)
 
-seed='ACTCTCCACTCA'
-for dom in ndomain :
-    if hamming_distance(seed,dom)<4:
-        ndomain.remove(dom)
-ndomain.append(seed)
-shuffle(ndomain)
+##ff=open('afhamming.txt','w')
+##ff.write('\n'.join(ndomain))
+##ff.close()
+f=open('afhamming.txt','r')
 nndomain=[]
 nnum=1
-nndomain.append(seed)
-for ii in range(len(ndomain)):
+nndomain.append(f.readline().strip('\n'))
+for line in f:
+    dom=line.strip('\n')
     flag=0
     #print(ii)
     for iii in range(nnum):
-        a=hamming_distance(ndomain[ii],nndomain[iii]) #hamming distance
-        b=subword_dist(ndomain[ii],nndomain[iii])  #subword
-        c=same_length(ndomain[ii],nndomain[iii]) # max same length
+        a=hamming_distance(dom,nndomain[iii]) #hamming distance
+        b=subword_dist(dom,nndomain[iii])  #subword
+        c=same_length(dom,nndomain[iii]) # max same length
         #print(a)
-        if a<4 or b>8 or c >4:
+        if a<4  or c >5 or b> 7 :
             flag=1
             break
     #print(flag)
     if flag==0:
-        nndomain.append(ndomain[ii])
+        nndomain.append(dom)
         nnum+=1
            
 print(len(nndomain))   
