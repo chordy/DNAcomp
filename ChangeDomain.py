@@ -6,12 +6,12 @@ a=[]
 l=[] # for storing letters
 cDomain=[]
 f=open('cDomain.txt','w')
-for i in range(11) :
+for i in range(12) :
     a.append(i)
     l.append('')
-for i in range(3**11) :
+for i in range(3**12) :
     tmp=0
-    for j in range(11) :
+    for j in range(12) :
         a[j]=int(((i-tmp)/3**j)%(3))
         tmp=tmp+a[j]*3**j
         #print(a[j])
