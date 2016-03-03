@@ -40,69 +40,98 @@ def same_length(x,y):
     for i in range(len(cmp)):
         if (i==0 and cmp[i]==1) or (i>0 and cmp[i-1]==0 and cmp[i]==1):
             st=i
-        if i>1 and cmp[i]==0 and cmp[i-1]==1:
+        if i==l-1 and cmp[i]==1:
+            le=l-st
+        elif i>1 and cmp[i]==0 and cmp[i-1]==1:
             le=i-st
         if le>tmp:
             tmp=le
     return tmp
+
 ##a='AATTCCAAC'
 ##b='ATTTCAACC'
 ##print(subword_dist(a,b))
-##f=open('cDomain.txt','r')
-####print(f.readline().strip('\n'))
+##f=open('ccDomain.txt','r')
+######print(f.readline().strip('\n'))
 ##ndomain=[]
 ##i=0
 ##for line in f :
-####    print (line)
-##    if 'AAAA'  in line:
-##        #print(line)
-##        continue
-##    elif 'CCC' in line:
-##        continue
-##    elif 'GGG' in line :
-##        continue
-##    elif 'TTTT' in line:
-##        continue
-##    elif line.count('C')+line.count('G')<4 or line.count('C')+line.count('G')>8:
+##    #c 的含量
+##    if line.count('C')<4 or line.count('C')>8:
 ##        continue
 ##    else :
 ##        ndomain.append(line.strip('\n'))
 ##        i=i+1
 ###hamming distance >7 & subword
 ##f.close()
-##seed='ACTCTCCACTCA'
+##seed='ACTCTCCATCACTCA'
 ##for dom in ndomain :
 ##    if hamming_distance(seed,dom)<4:
 ##        ndomain.remove(dom)
 ##ndomain.append(seed)
 ##shuffle(ndomain)
-
-##ff=open('afhamming.txt','w')
+##ff=open('afhammingcc.txt','w')
 ##ff.write('\n'.join(ndomain))
 ##ff.close()
-f=open('afhamming.txt','r')
+
+# 与已有的序列比对
+f=open('afhammingcc.txt','r')
 nndomain=[]
 nnum=1
 nndomain.append(f.readline().strip('\n'))
+loc=0
 for line in f:
+    loc+=1
+    if loc%1000==0:
+        print(loc)
     dom=line.strip('\n')
     flag=0
     #print(ii)
     for iii in range(nnum):
         a=hamming_distance(dom,nndomain[iii]) #hamming distance
-        b=subword_dist(dom,nndomain[iii])  #subword
-        c=same_length(dom,nndomain[iii]) # max same length
-        #print(a)
-        if a<4  or c >5 or b> 7 :
+        if a<4:
             flag=1
             break
+        b=subword_dist(dom,nndomain[iii])  #subword
+        if b>7 :
+            flag=1
+            break
+        c=same_length(dom,nndomain[iii]) # max same length
+        if c>5:
+            flag=1
+            break
+        
+##        if a<4  or c >5 or b> 7 :
+##            flag=1
+####            print(dom,nndomain[iii])
+####            print(a,b,c)
+##            break
     #print(flag)
     if flag==0:
         nndomain.append(dom)
         nnum+=1
-           
 print(len(nndomain))   
-nf=open('ncDomain.txt','w')
+nf=open('nccDomain.txt','w')
 nf.write('\n'.join(nndomain))
 nf.close()
 
+
+# 靠近toehold的4个碱基不能相同
+
+##nf=open('nccDomain.txt','r')
+##nnndomain=[]
+##nnndomain.append(nf.readline().strip('\n'))
+##for line in nf:
+##    flag=0
+##    dom=line.strip('\n')
+##    for ddom in nnndomain:
+##        if ddom[0:6]==dom[0:6] or ddom[9:15]==dom[9:15]:
+##            flag=1
+##            print(dom,ddom)
+##            break
+##    if flag==0:
+##        nnndomain.append(dom)
+##nf.close()
+##nnf=open('af4Domain.txt','w')
+##nnf.write('\n'.join(nnndomain))
+##nnf.close()

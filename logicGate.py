@@ -50,7 +50,7 @@ def gen_lgat(typ,num,cdomain):
         genG.typ='or'
         genG.inp.append(in0)
         genG.inp.append(in1)
-        genG.out.append(out)
+        genG.out=out
         genG.gate_seq.append(s1)
         genG.gate_seq.append(s2)
         genG.gate_seq.append(s3)

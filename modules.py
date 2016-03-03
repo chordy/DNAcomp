@@ -32,7 +32,7 @@ class adap:
         self.typ=typ
         self.bfnum=bf
         self.afnum=af
-        self.portnum=0
+        self.portnum=portnum
         self.seq=[]
     def show(self):
         print('type%d adaptor %d : %d to %d, %d'%(self.typ,self.num,self.bfnum,self.afnum,self.portnum))

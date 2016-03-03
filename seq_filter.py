@@ -40,7 +40,9 @@ def same_length(x,y):
     for i in range(len(cmp)):
         if (i==0 and cmp[i]==1) or (i>0 and cmp[i-1]==0 and cmp[i]==1):
             st=i
-        if i>1 and cmp[i]==0 and cmp[i-1]==1:
+        if i==l-1 and cmp[i]==1:
+            le=l-st
+        elif i>1 and cmp[i]==0 and cmp[i-1]==1:
             le=i-st
         if le>tmp:
             tmp=le
@@ -84,16 +86,25 @@ f=open('afhamming.txt','r')
 nndomain=[]
 nnum=1
 nndomain.append(f.readline().strip('\n'))
+loc=0
 for line in f:
+    loc+=1
+    if loc%1000==0:
+        print(loc)
     dom=line.strip('\n')
     flag=0
     #print(ii)
     for iii in range(nnum):
         a=hamming_distance(dom,nndomain[iii]) #hamming distance
+        if a<4:
+            flag=1
+            break
         b=subword_dist(dom,nndomain[iii])  #subword
+        if b>7 :
+            flag=1
+            break
         c=same_length(dom,nndomain[iii]) # max same length
-        #print(a)
-        if a<4  or c >5 or b> 7 :
+        if c>5:
             flag=1
             break
     #print(flag)
