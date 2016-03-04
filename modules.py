@@ -38,10 +38,10 @@ class adap:
         print('type%d adaptor %d : %d to %d, %d'%(self.typ,self.num,self.bfnum,self.afnum,self.portnum))
         print('sequence:',self.seq)
     def setSeq2(self,modules):# type2 adaptor
-        alpha='AGT'
-        gamma='GTA'
-        cal='TG' #close to alpha
-        cg='GA'  #close to gamma
+        alpha='ACT'
+        gamma='TAC'
+        cal='CA' #close to alpha
+        cg='TC'  #close to gamma
         for module in modules:#存放所有模块的list
             if module.num==self.bfnum:#找到输出模块
                 om=module
@@ -73,10 +73,10 @@ class adap:
         self.seq.append(s9)
         self.seq.append(s10)
     def setSeq1(self,inps,modules):# type2 adaptor
-        alpha='AGT'
-        gamma='GTA'
-        cal='TG' #close to alpha
-        cg='GA'  #close to gamma
+        alpha='ACT'
+        gamma='TAC'
+        cal='CA' #close to alpha
+        cg='TC'  #close to gamma
         for module in modules:#存放所有模块的list
             if module.num==self.afnum:
                 inm=module
@@ -115,10 +115,10 @@ class adap:
         self.seq.append(s10)
 
     def setSeq3(self,modules,oupts):# type2 adaptor
-        alpha='AGT'
-        gamma='GTA'
-        cal='TG' #close to alpha
-        cg='GA'  #close to gamma
+        alpha='ACT'
+        gamma='TAC'
+        cal='CA' #close to alpha
+        cg='TC'  #close to gamma
         for module in modules:#存放所有模块的list
             if module.num==self.bfnum:#找到输出模块
                 om=module

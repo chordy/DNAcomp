@@ -4,20 +4,20 @@
 import modules
 
 def gen_inp(num, cdomain):
-    alpha='AGT'
-    gamma='GTA'
-    cal='TG' #close to alpha
-    cg='GA'  #close to gamma
+    alpha='ACT'
+    gamma='TAC'
+    cal='CA' #close to alpha
+    cg='TC'  #close to gamma
     s1=cal+alpha+cal+cdomain[0]+cg+gamma+cg
     s2=cal+alpha+cal+cdomain[1]+cg+gamma+cg
     ninp=modules.inpt(num)
     ninp.seq=[s1,s2]
     return(ninp)
 def gen_oup(num,cdomain):
-    alpha='AGT'
-    gamma='GTA'
-    cal='TG' #close to alpha
-    cg='GA'  #close to gamma
+    alpha='ACT'
+    gamma='TAC'
+    cal='CA' #close to alpha
+    cg='TC'  #close to gamma
     s1=cal+alpha+cal+cdomain[0]+cg+gamma+cg
     s2=cal+alpha+cal+cdomain[1]+cg+gamma+cg
     noup=modules.outp(num)

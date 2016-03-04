@@ -1,6 +1,5 @@
 #generate hardware from 'ncDomain.txt'
 import logicGate
-import logicGate
 import inpAndOupt
 import modules
 import sqlite3
