@@ -4,7 +4,7 @@
 import modules
 
 def gen_inp(num, cdomain):
-    alpha='ACT'
+    alpha='TCT'
     gamma='TAC'
     cal='CA' #close to alpha
     cg='TC'  #close to gamma
@@ -14,7 +14,7 @@ def gen_inp(num, cdomain):
     ninp.seq=[s1,s2]
     return(ninp)
 def gen_oup(num,cdomain):
-    alpha='ACT'
+    alpha='TCT'
     gamma='TAC'
     cal='CA' #close to alpha
     cg='TC'  #close to gamma

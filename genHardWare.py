@@ -3,12 +3,15 @@ import logicGate
 import inpAndOupt
 import modules
 import sqlite3
-f=open('ncDomain.txt','r')
+f=open('af_5base.txt','r')
 cdomain=[] 
 po=0 #position
 
 for line in f:
     cdomain.append(line.strip('\n'))
+
+print('lib length',len(cdomain))
+
 ##########################
 # Logic gate
 mods=[] # for saving modules
@@ -30,13 +33,13 @@ for i in range(4):
     
 ###############
 # input and output
-inpts=[]
+##inpts=[]
 oupts=[]
-for i in range(10):
-    inp=inpAndOupt.gen_inp (i,cdomain[po:po+2])
-    po+=2
-    inpts.append(inp)
-for i in range(10):    
+##for i in range(10):
+##    inp=inpAndOupt.gen_inp (i,cdomain[po:po+2])
+##    po+=2
+##    inpts.append(inp)
+for i in range(4):    
     oup=inpAndOupt.gen_oup (i,cdomain[po:po+2])
     po+=2
     oupts.append(oup)
@@ -53,54 +56,36 @@ adpnum=0
 for i in range(len(mods)):
     for j in range (len(mods)):
         if i !=j:
-           ad1=modules.adap(2,i,j,0)
-           ad1.setSeq2(mods)
+           ad1=modules.adap(1,i,j,0)
+           ad1.setSeq1(mods)
            ad1.num=adpnum
            adps.append(ad1)
            adpnum+=1
            if mods[j].typ !='not':
-               ad2=modules.adap(2,i,j,1)
-               ad2.setSeq2(mods)
+               ad2=modules.adap(1,i,j,1)
+               ad2.setSeq1(mods)
                ad2.num=adpnum
                adps.append(ad2)
                adpnum+=1
-for i in range(len(inpts)):
-    for j in range (len(mods)):
-       ad1=modules.adap(1,i,j,0)
-       ad1.setSeq1(inpts,mods)
-       ad1.num=adpnum
-       adps.append(ad1)
-       adpnum+=1
-       if mods[j].typ !='not':
-           ad2=modules.adap(1,i,j,1)
-           ad2.setSeq1(inpts,mods)
-           ad2.num=adpnum
-           adps.append(ad2)
-           adpnum+=1
+
 for i in range(len(oupts)):
     for j in range (len(mods)):
-       ad1=modules.adap(3,j,i,0)
-       ad1.setSeq3(mods,oupts)
+       ad1=modules.adap(2,j,i,0)
+       ad1.setSeq2(mods,oupts)
        ad1.num=adpnum
        adps.append(ad1)
        adpnum+=1
        
 ##for adp in adps:
 ##    adp.show()
-
+print('used seqs',po+1)
 conn = sqlite3.connect('hardwaredb.sqlite')
 cur = conn.cursor()
 cur.executescript('''
-DROP TABLE IF EXISTS Inputs;
 DROP TABLE IF EXISTS Ouputs;
 DROP TABLE IF EXISTS LogicGates;
 DROP TABLE IF EXISTS Adaptors;
 
-CREATE TABLE Inputs (
-    num INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
-    IN0 TEXT,
-    IN1 TEXT
-);
 CREATE TABLE Ouputs (
     num INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
     OU0 TEXT,
@@ -137,10 +122,10 @@ CREATE TABLE Adaptors (
     s10 TEXT
 )
 ''')
-for inp in inpts:
-    cur.execute('''INSERT OR IGNORE INTO Inputs(num,IN0,IN1)
-        VALUES(?, ?,?)''',(inp.num,inp.seq[0],inp.seq[1]))
-    conn.commit()
+##for inp in inpts:
+##    cur.execute('''INSERT OR IGNORE INTO Inputs(num,IN0,IN1)
+##        VALUES(?, ?,?)''',(inp.num,inp.seq[0],inp.seq[1]))
+##    conn.commit()
 for oup in oupts:
     cur.execute('''INSERT OR IGNORE INTO Ouputs(num,OU0,OU1)
         VALUES(?, ?,?)''',(oup.num,oup.seq[0],oup.seq[1]))
@@ -166,3 +151,4 @@ for adp in adps:
                 ,(adp.num,adp.typ,adp.bfnum,adp.afnum,adp.portnum, \
                   q[0],q[1],q[2],q[3],q[4],q[5],q[6],q[7],q[8],q[9]))
     conn.commit()
+conn.close()

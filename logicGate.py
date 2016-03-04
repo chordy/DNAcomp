@@ -9,7 +9,7 @@ import rev_comp_of_seq as rec
 import modules
 
 def gen_lgat(typ,num,cdomain):
-    alpha='ACT'
+    alpha='TCT'
     gamma='TAC'
     cal='CA' #close to alpha
     cg='TC'  #close to gamma
@@ -20,7 +20,7 @@ def gen_lgat(typ,num,cdomain):
         s2= cg+cdomain[1]+cal+alpha+cal+cdomain[0]+cg #o=0
         rs3=cal+alpha+cal+cdomain[2]+cg+gamma+cg+cal+alpha+cal+cdomain[3]+cg+gamma+cg
         s3=rec.rev_comp(rs3)  #in=1
-        s4=cg+cdomain[4]+cal+alpha+cal+cdomain[2]+cal+alpha+cal+cdomain[3]+cg #o=1
+        s4=cg+cdomain[4]+cal+alpha+cal+cdomain[2]+cg+cal+alpha+cal+cdomain[3]+cg #o=1
         in0=[cdomain[0],cdomain[2]]
         in1=[cdomain[0],cdomain[3]]
         out=[cdomain[1],cdomain[4]]
@@ -41,7 +41,7 @@ def gen_lgat(typ,num,cdomain):
         s4= cg+cdomain[1]+cal+alpha+cal+cdomain[0]+cg #o=1
         rs1=cal+alpha+cal+cdomain[2]+cg+gamma+cg+cal+alpha+cal+cdomain[3]+cg+gamma+cg
         s1=rec.rev_comp(rs1)
-        s2=cg+cdomain[4]+cal+alpha+cal+cdomain[2]+cal+alpha+cal+cdomain[3]+cg
+        s2=cg+cdomain[4]+cal+alpha+cal+cdomain[2]+cg+cal+alpha+cal+cdomain[3]+cg
         in0=[cdomain[2],cdomain[0]]
         in1=[cdomain[3],cdomain[0]]
         out=[cdomain[4],cdomain[1]]
@@ -59,16 +59,16 @@ def gen_lgat(typ,num,cdomain):
     elif typ==3: # xor gate
         rs1=cal+alpha+cal+cdomain[0]+cg+gamma+cg+cal+alpha+cal+cdomain[2]+cg+gamma+cg
         s1=rec.rev_comp(rs1)   #in1=0 in2=0
-        s2=cg+cdomain[4]+cal+alpha+cal+cdomain[0]+cal+alpha+cal+cdomain[2]+cg
+        s2=cg+cdomain[4]+cal+alpha+cal+cdomain[0]+cg+cal+alpha+cal+cdomain[2]+cg
         rs3=cal+alpha+cal+cdomain[0]+cg+gamma+cg+cal+alpha+cal+cdomain[3]+cg+gamma+cg
         s3=rec.rev_comp(rs3)    #in1=0 in2=1
-        s4=cg+cdomain[5]+cal+alpha+cal+cdomain[0]+cal+alpha+cal+cdomain[3]+cg
+        s4=cg+cdomain[5]+cal+alpha+cal+cdomain[0]+cg+cal+alpha+cal+cdomain[3]+cg
         rs5=cal+alpha+cal+cdomain[1]+cg+gamma+cg+cal+alpha+cal+cdomain[2]+cg+gamma+cg
         s5=rec.rev_comp(rs5)   #in1=1 in2=0
-        s6=cg+cdomain[5]+cal+alpha+cal+cdomain[1]+cal+alpha+cal+cdomain[2]+cg
+        s6=cg+cdomain[5]+cal+alpha+cal+cdomain[1]+cg+cal+alpha+cal+cdomain[2]+cg
         rs7=cal+alpha+cal+cdomain[1]+cg+gamma+cg+cal+alpha+cal+cdomain[3]+cg+gamma+cg
         s7=rec.rev_comp(rs7)  #in1=1 in2=1
-        s8=cg+cdomain[4]+cal+alpha+cal+cdomain[1]+cal+alpha+cal+cdomain[3]+cg
+        s8=cg+cdomain[4]+cal+alpha+cal+cdomain[1]+cg+cal+alpha+cal+cdomain[3]+cg
         in0=[cdomain[0],cdomain[1]]
         in1=[cdomain[2],cdomain[3]]
         out=[cdomain[4],cdomain[5]]

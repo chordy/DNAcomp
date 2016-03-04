@@ -37,8 +37,8 @@ class adap:
     def show(self):
         print('type%d adaptor %d : %d to %d, %d'%(self.typ,self.num,self.bfnum,self.afnum,self.portnum))
         print('sequence:',self.seq)
-    def setSeq2(self,modules):# type2 adaptor
-        alpha='ACT'
+    def setSeq1(self,modules):# type2 adaptor
+        alpha='TCT'
         gamma='TAC'
         cal='CA' #close to alpha
         cg='TC'  #close to gamma
@@ -72,50 +72,9 @@ class adap:
         self.seq.append(s8)
         self.seq.append(s9)
         self.seq.append(s10)
-    def setSeq1(self,inps,modules):# type2 adaptor
-        alpha='ACT'
-        gamma='TAC'
-        cal='CA' #close to alpha
-        cg='TC'  #close to gamma
-        for module in modules:#存放所有模块的list
-            if module.num==self.afnum:
-                inm=module
-                break
-        for inp in inps:
-            
-            #print(inp.num)
-            if inp.num==self.bfnum:#找到输出模块
-                om=inp
-                break
-        
-        
-        rs1=cg+gamma+cg+om.seq[0]+cal+alpha+cal
-        s1=rec.rev_comp(rs1)
-        s2=cal+alpha+cal+inm.inp[self.portnum][0]+cg+gamma+cg+om.seq[0]+cal
-        rs3=cg+gamma+cg+om.seq[1]+cal+alpha+cal
-        s3=rec.rev_comp(rs3)
-        s4=cal+alpha+cal+inm.inp[self.portnum][1]+cg+gamma+cg+om.seq[1]+cal
-        rs5=om.seq[0]+cal+alpha+cal #threshold 的序列需要考虑
-        s5=rec.rev_comp(rs5)
-        s6=om.seq[0]+cal
-        rs7=om.seq[1]+cal+alpha+cal #threshold 的序列需要考虑
-        s7=rec.rev_comp(rs7)
-        s8=om.seq[1]+cal
-        s9=cg+gamma+cg+om.seq[0]+cal
-        s10=cg+gamma+cg+om.seq[1]+cal
-        self.seq.append(s1)
-        self.seq.append(s2)
-        self.seq.append(s3)
-        self.seq.append(s4)
-        self.seq.append(s5)
-        self.seq.append(s6)
-        self.seq.append(s7)
-        self.seq.append(s8)
-        self.seq.append(s9)
-        self.seq.append(s10)
 
-    def setSeq3(self,modules,oupts):# type2 adaptor
-        alpha='ACT'
+    def setSeq2(self,modules,oupts):# type2 adaptor
+        alpha='TCT'
         gamma='TAC'
         cal='CA' #close to alpha
         cg='TC'  #close to gamma
@@ -129,10 +88,10 @@ class adap:
         
         rs1=cg+gamma+cg+om.out[0]+cal+alpha+cal
         s1=rec.rev_comp(rs1)
-        s2=cal+alpha+cal+inm.seq[0]+cg+gamma+cg+om.out[0]+cal
+        s2=cal+alpha+cal+inm.seq[0][7:19]+cg+gamma+cg+om.out[0]+cal
         rs3=cg+gamma+cg+om.out[1]+cal+alpha+cal
         s3=rec.rev_comp(rs3)
-        s4=cal+alpha+cal+inm.seq[1]+cg+gamma+cg+om.out[1]+cal
+        s4=cal+alpha+cal+inm.seq[1][7:19]+cg+gamma+cg+om.out[1]+cal
         rs5=om.out[0]+cal+alpha+cal #threshold 的序列需要考虑
         s5=rec.rev_comp(rs5)
         s6=om.out[0]+cal

@@ -47,6 +47,29 @@ def same_length(x,y):
         if le>tmp:
             tmp=le
     return tmp
+def same_le_st(x,y):
+    l=len(x)
+    cmp=[]
+    tmp=0
+    le=0
+    for i in range(l):
+        if x[i]==y[i]:
+            cmp.append(1)
+        else:
+            cmp.append(0)
+    st=0
+    tst=0
+    for i in range(len(cmp)):
+        if (i==0 and cmp[i]==1) or (i>0 and cmp[i-1]==0 and cmp[i]==1):
+            st=i
+        if i==l-1 and cmp[i]==1:
+            le=l-st
+        elif i>1 and cmp[i]==0 and cmp[i-1]==1:
+            le=i-st
+        if le>tmp:
+            tmp=le
+            tst=st
+    return tst
 ##a='AATTCCAAC'
 ##b='ATTTCAACC'
 ##print(subword_dist(a,b))
@@ -82,38 +105,75 @@ def same_length(x,y):
 ##ff=open('afhamming.txt','w')
 ##ff.write('\n'.join(ndomain))
 ##ff.close()
-f=open('afhamming.txt','r')
+##f=open('afhamming.txt','r')
+##nndomain=[]
+##nnum=1
+##nndomain.append(f.readline().strip('\n'))
+##loc=0
+##for line in f:
+##    loc+=1
+##    if loc%1000==0:
+##        print(loc)
+##    dom=line.strip('\n')
+##    flag=0
+##    #print(ii)
+##    for iii in range(nnum):
+##        a=hamming_distance(dom,nndomain[iii]) #hamming distance
+##        if a<4:
+##            flag=1
+##            break
+##        b=subword_dist(dom,nndomain[iii])  #subword
+##        if b>7 :
+##            flag=1
+##            break
+##        c=same_length(dom,nndomain[iii]) # max same length
+##        if c>5:
+##            flag=1
+##            break
+##    #print(flag)
+##    if flag==0:
+##        nndomain.append(dom)
+##        nnum+=1
+##           
+##print(len(nndomain))   
+##nf=open('ncDomain.txt','w')
+##nf.write('\n'.join(nndomain))
+##nf.close()
+
+##如果中间有五个碱基相同，必须保证两边的两个都不含有TC，防止形成TG键
+f=open('ncDomain.txt','r')
 nndomain=[]
 nnum=1
 nndomain.append(f.readline().strip('\n'))
-loc=0
 for line in f:
-    loc+=1
-    if loc%1000==0:
-        print(loc)
+    
     dom=line.strip('\n')
     flag=0
     #print(ii)
     for iii in range(nnum):
-        a=hamming_distance(dom,nndomain[iii]) #hamming distance
-        if a<4:
-            flag=1
-            break
-        b=subword_dist(dom,nndomain[iii])  #subword
-        if b>7 :
-            flag=1
-            break
         c=same_length(dom,nndomain[iii]) # max same length
-        if c>5:
-            flag=1
-            break
+        if c==5:
+            st=same_le_st(dom,nndomain[iii])
+            if st>0 and st<7:
+                if dom[st-1]=='T' and nndomain[iii][st-1]=='C':
+                   flag=1
+                   break
+                if dom[st-1]=='C' and nndomain[iii][st-1]=='T':
+                   flag=1
+                   break
+                if dom[st+5]=='T' and nndomain[iii][st+5]=='C':
+                   flag=1
+                   break
+                if dom[st+5]=='C' and nndomain[iii][st+5]=='T':
+                   flag=1
+                   break
+            
     #print(flag)
     if flag==0:
         nndomain.append(dom)
         nnum+=1
            
 print(len(nndomain))   
-nf=open('ncDomain.txt','w')
+nf=open('af_5base.txt','w')
 nf.write('\n'.join(nndomain))
 nf.close()
-
