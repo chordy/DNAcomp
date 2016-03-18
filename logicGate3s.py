@@ -3,7 +3,7 @@
 #function : generate a logic gate
 # input: logic type, changeable domain sequence
 # output : the sequences of generated logic gate
-# by O.L, Feb,16,2016
+# by O.L, Mar 18 ,2016
 
 import rev_comp_of_seq as rec
 import modules
@@ -21,6 +21,7 @@ def gen_lgat(typ,num,cdomain):
         rs3=cal+alpha+cal+cdomain[2]+cg+gamma+cg+cal+alpha+cal+cdomain[3]+cg+gamma+cg
         s3=rec.rev_comp(rs3)  #in=1
         s4=cg+cdomain[4]+cal+alpha+cal+cdomain[2]+cg+cal+alpha+cal+cdomain[3]+cg #o=1
+	s5=
         in0=[cdomain[0],cdomain[2]]
         in1=[cdomain[0],cdomain[3]]
         out=[cdomain[1],cdomain[4]]

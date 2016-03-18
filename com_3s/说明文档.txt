@@ -1,0 +1,8 @@
+每个模块的功能：
+ChangeDomain: 生成所有的可变序列，写入到txt文档 
+genInstr: 生成一条指令对应的序列
+logicgate： 产生一个逻辑门的序列，toehold在函数内部，需要输入类型,返回一个list
+rev_comp_of_seq: 一条序列的反补序列
+modules：所有模块的定义
+_c为带有控制域的部分
+inpAndOupt:input output序列的产生
