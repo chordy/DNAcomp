@@ -47,13 +47,12 @@ class adap:
                 om=module
             if module.num==self.afnum:
                 inm=module
-        
         rs1=cg+gamma+cg+om.out[0]+cal+alpha+cal
         s1=rec.rev_comp(rs1)
-        s2=cal+alpha+cal+inm.inp[self.portnum][0]+cg+gamma+cg+om.out[0]+cal
+        
         rs3=cg+gamma+cg+om.out[1]+cal+alpha+cal
         s3=rec.rev_comp(rs3)
-        s4=cal+alpha+cal+inm.inp[self.portnum][1]+cg+gamma+cg+om.out[1]+cal
+        
         rs5=om.out[0]+cal+alpha+cal #threshold 的序列需要考虑
         s5=rec.rev_comp(rs5)
         s6=om.out[0]+cal
@@ -62,6 +61,22 @@ class adap:
         s8=om.out[1]+cal
         s9=cg+gamma+cg+om.out[0]+cal
         s10=cg+gamma+cg+om.out[1]+cal
+        if self.portnum==0:
+            s2=cal+alpha+cal+inm.inp[self.portnum][0]+cg+gamma+cg+om.out[0]+cal #0
+            s4=cal+alpha+cal+inm.inp[self.portnum][1]+cg+gamma+cg+om.out[1]+cal#1
+        else:
+            if inm.typ=='xor':
+                s2=cal+inm.inp[self.portnum][0]+cg+gamma+cg+om.out[0]+cal
+                s4=cal+inm.inp[self.portnum][1]+cg+gamma+cg+om.out[1]+cal
+            elif inm.typ='and':
+                s2=cal+alpha+cal+inm.inp[self.portnum][0]+cg+gamma+cg+om.out[0]+cal #0
+                s4=cal+inm.inp[self.portnum][1]+cg+gamma+cg+om.out[1]+cal
+            elif inm.typ=='or':
+                s2=cal+inm.inp[self.portnum][0]+cg+gamma+cg+om.out[0]+cal
+                s4=cal+alpha+cal+inm.inp[self.portnum][1]+cg+gamma+cg+om.out[1]+cal#1
+            else:
+                s2=cal+alpha+cal+inm.inp[self.portnum][0]+cg+gamma+cg+om.out[0]+cal #0
+                s4=cal+alpha+cal+inm.inp[self.portnum][1]+cg+gamma+cg+om.out[1]+cal#1          
         self.seq.append(s1)
         self.seq.append(s2)
         self.seq.append(s3)
@@ -71,7 +86,7 @@ class adap:
         self.seq.append(s7)
         self.seq.append(s8)
         self.seq.append(s9)
-        self.seq.append(s10)
+        self.seq.append(s10)       
 
     def setSeq2(self,modules,oupts):# type2 adaptor
         alpha='TCT'
