@@ -1,5 +1,5 @@
 #generate hardware from 'ncDomain.txt'
-import logicGate
+import logicGate3s as logicGate
 import inpAndOupt
 import modules
 import sqlite3
@@ -8,7 +8,7 @@ cdomain=[]
 po=0 #position
 
 for line in f:
-    cdomain.append(line.strip('\n'))
+    cdomain.append(line.strip('\n\r'))
 
 print('lib length',len(cdomain))
 
@@ -101,7 +101,12 @@ CREATE TABLE LogicGates (
     s5 TEXT,
     s6 TEXT,
     s7 TEXT,
-    s8 TEXT
+    s8 TEXT,
+    s9 TEXT,
+    s10 TEXT,
+    s11 TEXT,
+    s12 TEXT
+    
 );
 
 CREATE TABLE Adaptors (
@@ -132,16 +137,21 @@ for oup in oupts:
     conn.commit()
 for mod in mods:
     tseq=mod.gate_seq
-    if mod.typ!='xor':
+    if mod.typ in ['and','or']:
+        cur.execute('''INSERT OR IGNORE INTO LogicGates(
+            num,type,s1,s2,s3,s4,s5) VALUES(?,?,?,?,?,?,?)'''
+                ,(mod.num,mod.typ,tseq[0],tseq[1],tseq[2],tseq[3],tseq[4]))
+    elif mod.typ=='not':
         cur.execute('''INSERT OR IGNORE INTO LogicGates(
             num,type,s1,s2,s3,s4) VALUES(?,?,?,?,?,?)'''
                 ,(mod.num,mod.typ,tseq[0],tseq[1],tseq[2],tseq[3]))
-    conn.commit()
+        
     if mod.typ=='xor':
         cur.execute('''INSERT OR IGNORE INTO LogicGates(num,type,s1,s2,s3,s4,
-            s5,s6,s7,s8)VALUES(?,?,?,?,?,?,?,?,?,?)''',(\
+            s5,s6,s7,s8,s9,s10,s11,s12)VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)''',(\
             mod.num,mod.typ,tseq[0],tseq[1],\
-            tseq[2],tseq[3],tseq[4],tseq[5],tseq[6],tseq[7]))
+            tseq[2],tseq[3],tseq[4],tseq[5],tseq[6],tseq[7],\
+            tseq[8],tseq[9],tseq[10],tseq[11]))
     conn.commit()
 for adp in adps:
     q=adp.seq

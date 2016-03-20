@@ -6,7 +6,7 @@ class modul : #modules
     def __init__ (self,num):
         self.num=num
         self.typ=''
-        self.inp=[] #包括0，1两条
+        self.inp=[] #0,1
         #self.in2=[]
         self.out=[]
         self.gate_seq=[]
@@ -42,8 +42,8 @@ class adap:
         gamma='TAC'
         cal='CA' #close to alpha
         cg='TC'  #close to gamma
-        for module in modules:#存放所有模块的list
-            if module.num==self.bfnum:#找到输出模块
+        for module in modules:#for storing list
+            if module.num==self.bfnum:#out module
                 om=module
             if module.num==self.afnum:
                 inm=module
@@ -53,10 +53,10 @@ class adap:
         rs3=cg+gamma+cg+om.out[1]+cal+alpha+cal
         s3=rec.rev_comp(rs3)
         
-        rs5=om.out[0]+cal+alpha+cal #threshold 的序列需要考虑
+        rs5=om.out[0]+cal+alpha+cal #threshold 
         s5=rec.rev_comp(rs5)
         s6=om.out[0]+cal
-        rs7=om.out[1]+cal+alpha+cal #threshold 的序列需要考虑
+        rs7=om.out[1]+cal+alpha+cal #!threshold needs reconsidering
         s7=rec.rev_comp(rs7)
         s8=om.out[1]+cal
         s9=cg+gamma+cg+om.out[0]+cal
@@ -68,7 +68,7 @@ class adap:
             if inm.typ=='xor':
                 s2=cal+inm.inp[self.portnum][0]+cg+gamma+cg+om.out[0]+cal
                 s4=cal+inm.inp[self.portnum][1]+cg+gamma+cg+om.out[1]+cal
-            elif inm.typ='and':
+            elif inm.typ=='and':
                 s2=cal+alpha+cal+inm.inp[self.portnum][0]+cg+gamma+cg+om.out[0]+cal #0
                 s4=cal+inm.inp[self.portnum][1]+cg+gamma+cg+om.out[1]+cal
             elif inm.typ=='or':
@@ -93,8 +93,8 @@ class adap:
         gamma='TAC'
         cal='CA' #close to alpha
         cg='TC'  #close to gamma
-        for module in modules:#存放所有模块的list
-            if module.num==self.bfnum:#找到输出模块
+        for module in modules:
+            if module.num==self.bfnum:
                 om=module
         for oupt in oupts:
             
@@ -107,10 +107,10 @@ class adap:
         rs3=cg+gamma+cg+om.out[1]+cal+alpha+cal
         s3=rec.rev_comp(rs3)
         s4=cal+alpha+cal+inm.seq[1][7:19]+cg+gamma+cg+om.out[1]+cal
-        rs5=om.out[0]+cal+alpha+cal #threshold 的序列需要考虑
+        rs5=om.out[0]+cal+alpha+cal #threshold 
         s5=rec.rev_comp(rs5)
         s6=om.out[0]+cal
-        rs7=om.out[1]+cal+alpha+cal #threshold 的序列需要考虑
+        rs7=om.out[1]+cal+alpha+cal #threshold 
         s7=rec.rev_comp(rs7)
         s8=om.out[1]+cal
         s9=cg+gamma+cg+om.out[0]+cal

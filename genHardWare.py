@@ -9,7 +9,7 @@ po=0 #position
 
 for line in f:
     cdomain.append(line.strip('\n'))
-
+    cdomain.append(line.strip('\r'))
 print('lib length',len(cdomain))
 
 ##########################
