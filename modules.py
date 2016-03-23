@@ -47,17 +47,17 @@ class adap:
                 om=module
             if module.num==self.afnum:
                 inm=module
-        
+
         rs1=cg+gamma+cg+om.out[0]+cal+alpha+cal
         s1=rec.rev_comp(rs1)
         s2=cal+alpha+cal+inm.inp[self.portnum][0]+cg+gamma+cg+om.out[0]+cal
         rs3=cg+gamma+cg+om.out[1]+cal+alpha+cal
         s3=rec.rev_comp(rs3)
         s4=cal+alpha+cal+inm.inp[self.portnum][1]+cg+gamma+cg+om.out[1]+cal
-        rs5=om.out[0]+cal+alpha+cal #threshold 的序列需要考虑
+        rs5=om.out[0]+cal+alpha+cal+om.inp[0][0] #threshold 的序列需要考虑
         s5=rec.rev_comp(rs5)
         s6=om.out[0]+cal
-        rs7=om.out[1]+cal+alpha+cal #threshold 的序列需要考虑
+        rs7=om.out[1]+cal+alpha+cal+om.inp[0][1] #threshold 的序列需要考虑
         s7=rec.rev_comp(rs7)
         s8=om.out[1]+cal
         s9=cg+gamma+cg+om.out[0]+cal
@@ -82,20 +82,20 @@ class adap:
             if module.num==self.bfnum:#找到输出模块
                 om=module
         for oupt in oupts:
-            
+
             if oupt.num==self.afnum:
                 inm=oupt
-        
+
         rs1=cg+gamma+cg+om.out[0]+cal+alpha+cal
         s1=rec.rev_comp(rs1)
         s2=cal+alpha+cal+inm.seq[0][7:19]+cg+gamma+cg+om.out[0]+cal
         rs3=cg+gamma+cg+om.out[1]+cal+alpha+cal
         s3=rec.rev_comp(rs3)
         s4=cal+alpha+cal+inm.seq[1][7:19]+cg+gamma+cg+om.out[1]+cal
-        rs5=om.out[0]+cal+alpha+cal #threshold 的序列需要考虑
+        rs5=om.out[0]+cal+alpha+cal+om.inp[0][0] #threshold 的序列需要考虑
         s5=rec.rev_comp(rs5)
         s6=om.out[0]+cal
-        rs7=om.out[1]+cal+alpha+cal #threshold 的序列需要考虑
+        rs7=om.out[1]+cal+alpha+cal+om.inp[0][1] #threshold 的序列需要考虑
         s7=rec.rev_comp(rs7)
         s8=om.out[1]+cal
         s9=cg+gamma+cg+om.out[0]+cal
