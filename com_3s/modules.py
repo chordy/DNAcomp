@@ -103,10 +103,10 @@ class adap:
         
         rs1=cg+gamma+cg+om.out[0]+cal+alpha+cal
         s1=rec.rev_comp(rs1)
-        s2=cal+alpha+cal+inm.seq[0][7:19]+cg+gamma+cg+om.out[0]+cal
+        s2=cal+inm.seq[0][7:19]+cg+gamma+cg+om.out[0]+cal
         rs3=cg+gamma+cg+om.out[1]+cal+alpha+cal
         s3=rec.rev_comp(rs3)
-        s4=cal+alpha+cal+inm.seq[1][7:19]+cg+gamma+cg+om.out[1]+cal
+        s4=cal+inm.seq[1][7:19]+cg+gamma+cg+om.out[1]+cal
 ##        rs5=om.out[0]+cal+alpha+cal #threshold 
 ##        s5=rec.rev_comp(rs5)
 ##        s6=om.out[0]+cal
