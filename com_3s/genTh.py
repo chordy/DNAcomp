@@ -16,7 +16,7 @@ def gen_th(mods):
 
     for mod in mods:
         cout=mod.out
-        print (cout)
+        #print (cout)
         t1=rec.rev_comp(cg+cout[0]+cal+alpha+cal)
         t2=cg+cout[0]
         t3=rec.rev_comp(cg+cout[1]+cal+alpha+cal)

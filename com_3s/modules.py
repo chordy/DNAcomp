@@ -53,12 +53,12 @@ class adap:
         rs3=cg+gamma+cg+om.out[1]+cal+alpha+cal
         s3=rec.rev_comp(rs3)
         
-        rs5=om.out[0]+cal+alpha+cal #threshold 
-        s5=rec.rev_comp(rs5)
-        s6=om.out[0]+cal
-        rs7=om.out[1]+cal+alpha+cal #!threshold needs reconsidering
-        s7=rec.rev_comp(rs7)
-        s8=om.out[1]+cal
+##        rs5=om.out[0]+cal+alpha+cal #threshold 
+##        s5=rec.rev_comp(rs5)
+##        s6=om.out[0]+cal
+##        rs7=om.out[1]+cal+alpha+cal #!threshold needs reconsidering
+##        s7=rec.rev_comp(rs7)
+##        s8=om.out[1]+cal
         s9=cg+gamma+cg+om.out[0]+cal
         s10=cg+gamma+cg+om.out[1]+cal
         if self.portnum==0:
@@ -81,10 +81,10 @@ class adap:
         self.seq.append(s2)
         self.seq.append(s3)
         self.seq.append(s4)
-        self.seq.append(s5)
-        self.seq.append(s6)
-        self.seq.append(s7)
-        self.seq.append(s8)
+##        self.seq.append(s5)
+##        self.seq.append(s6)
+##        self.seq.append(s7)
+##        self.seq.append(s8)
         self.seq.append(s9)
         self.seq.append(s10)       
 
@@ -107,21 +107,21 @@ class adap:
         rs3=cg+gamma+cg+om.out[1]+cal+alpha+cal
         s3=rec.rev_comp(rs3)
         s4=cal+alpha+cal+inm.seq[1][7:19]+cg+gamma+cg+om.out[1]+cal
-        rs5=om.out[0]+cal+alpha+cal #threshold 
-        s5=rec.rev_comp(rs5)
-        s6=om.out[0]+cal
-        rs7=om.out[1]+cal+alpha+cal #threshold 
-        s7=rec.rev_comp(rs7)
-        s8=om.out[1]+cal
+##        rs5=om.out[0]+cal+alpha+cal #threshold 
+##        s5=rec.rev_comp(rs5)
+##        s6=om.out[0]+cal
+##        rs7=om.out[1]+cal+alpha+cal #threshold 
+##        s7=rec.rev_comp(rs7)
+##        s8=om.out[1]+cal
         s9=cg+gamma+cg+om.out[0]+cal
         s10=cg+gamma+cg+om.out[1]+cal
         self.seq.append(s1)
         self.seq.append(s2)
         self.seq.append(s3)
         self.seq.append(s4)
-        self.seq.append(s5)
-        self.seq.append(s6)
-        self.seq.append(s7)
-        self.seq.append(s8)
+##        self.seq.append(s5)
+##        self.seq.append(s6)
+##        self.seq.append(s7)
+##        self.seq.append(s8)
         self.seq.append(s9)
         self.seq.append(s10)

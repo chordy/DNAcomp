@@ -2,6 +2,7 @@
 import logicGate3s as logicGate
 import inpAndOupt
 import modules
+import genTh
 import sqlite3
 f=open('af_5base.txt','r')
 cdomain=[] 
@@ -78,8 +79,12 @@ for i in range(len(oupts)):
        
 ##for adp in adps:
 ##    adp.show()
+##########################
+##threshold
+##############################
+th_lib=genTh.gen_th(mods)
 print('used seqs',po+1)
-conn = sqlite3.connect('hardwaredb.sqlite')
+conn = sqlite3.connect('hardwaredb160625.sqlite')
 cur = conn.cursor()
 cur.executescript('''
 DROP TABLE IF EXISTS Ouputs;
@@ -119,12 +124,15 @@ CREATE TABLE Adaptors (
     s2 TEXT,
     s3 TEXT,
     s4 TEXT,
-    s5 TEXT,
-    s6 TEXT,
-    s7 TEXT,
-    s8 TEXT,
     s9 TEXT,
     s10 TEXT
+);
+CREATE TABLE Ths (
+    num INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
+    s1 TEXT,
+    s2 TEXT,
+    s3 TEXT,
+    s4 TEXT
 )
 ''')
 ##for inp in inpts:
@@ -156,9 +164,16 @@ for mod in mods:
 for adp in adps:
     q=adp.seq
     cur.execute('''INSERT OR IGNORE INTO Adaptors(
-        num,type,onum,inum,portnumber,s1,s2,s3,s4,s5,s6,s7,s8,s9,s10)
-        VALUES(?, ?,?,?,?,?,?,?,?,?,?,?,?,?,?)'''
+        num,type,onum,inum,portnumber,s1,s2,s3,s4,s9,s10)
+        VALUES(?,?,?,?,?,?,?,?,?,?,?)'''
                 ,(adp.num,adp.typ,adp.bfnum,adp.afnum,adp.portnum, \
-                  q[0],q[1],q[2],q[3],q[4],q[5],q[6],q[7],q[8],q[9]))
+                  q[0],q[1],q[2],q[3],q[4],q[5]))
     conn.commit()
+i=0
+for th in th_lib:
+    cur.execute('''INSERT OR IGNORE INTO Ths(
+        num,s1,s2,s3,s4) VALUES(?,?,?,?,?)'''
+                ,(i,th[0],th[1],th[2],th[3]))
+    conn.commit()
+    i=i+1
 conn.close()
