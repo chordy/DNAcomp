@@ -1,45 +1,43 @@
-#test function module
+#for exercise 
 #[ng,nn]=gen_lgat(1)
 #print (nn)
-import logicGate
-import logicGate
+
+#generate hardware from 'ncDomain.txt'
+import logicGate3s
 import inpAndOupt
 import modules
-cdomain=['AAAAA','AAAAG','CCCCC','GGGGG','AAGGG','AACCC','hhhhh']
-s1=(logicGate.gen_lgat(1,1,cdomain))
-s2=(logicGate.gen_lgat(2,2,cdomain))
-s3=(logicGate.gen_lgat(3,3,cdomain))
-s4=(logicGate.gen_lgat(4,4,cdomain))
-s4.show()
+import genTh
+
+
+f=open('af_5base.txt','r')
+cdomain=[] 
+po=0 #position
+
+for line in f:
+    cdomain.append(line.strip('\n\r'))
+    #cdomain.append(line.strip('\r'))
+print('lib length',len(cdomain))
+
+##########################
+# Logic gate
 mods=[] # for saving modules
-mods.append(s1)
-mods.append(s2)
-mods.append(s3)
-mods.append(s4)
-inpts=[]
-oupts=[]
 for i in range(4):
-    inp=inpAndOupt.gen_inp (i,cdomain)
-    inpts.append(inp)
-    oup=inpAndOupt.gen_oup (i,cdomain)
-    oupts.append(oup)
-print('************************************')
-for inp in inpts:
-    inp.show()
-print('************************************')
-for oup in oupts:
-    oup.show()
-print('************************************')
-ad1=modules.adap(2,3,4,0)
-ad1.setSeq2(mods)
-ad1.show()
-print('************************************')
-ad2=modules.adap(1,1,2,0)
-ad2.setSeq1(inpts,mods)
-ad2.show()
-print('************************************')
-ad3=modules.adap(3,1,2,0)
-ad3.setSeq3(mods,oupts)
-ad3.show()
-print()
-print('************************************')
+    print(cdomain[po:po+5])
+    mods.append(logicGate3s.gen_lgat(1,i,cdomain[po:po+5]))
+    po=po+5
+
+for i in range(4):
+    mods.append(logicGate3s.gen_lgat(2,i+4,cdomain[po:po+5]))
+    po=po+5
+for i in range(4):
+    mods.append(logicGate3s.gen_lgat(3,i+8,cdomain[po:po+6]))
+    po=po+6
+for i in range(4):
+    mods.append(logicGate3s.gen_lgat(4,i+12,cdomain[po:po+4]))
+    po=po+4
+##for mod in mods:
+##    print (mod.out)
+th_lib=genTh.gen_th(mods)
+print (th_lib)
+
+
