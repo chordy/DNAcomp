@@ -6,7 +6,7 @@
 import logicGate3s
 import inpAndOupt
 import modules
-import genTh
+import genInstr
 
 
 f=open('af_5base.txt','r')
@@ -22,7 +22,6 @@ print('lib length',len(cdomain))
 # Logic gate
 mods=[] # for saving modules
 for i in range(4):
-    print(cdomain[po:po+5])
     mods.append(logicGate3s.gen_lgat(1,i,cdomain[po:po+5]))
     po=po+5
 
@@ -37,7 +36,7 @@ for i in range(4):
     po=po+4
 ##for mod in mods:
 ##    print (mod.out)
-th_lib=genTh.gen_th(mods)
-print (th_lib)
+ins=genInstr.instr(mods)
+print (ins)
 
 

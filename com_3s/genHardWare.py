@@ -3,6 +3,7 @@ import logicGate3s as logicGate
 import inpAndOupt
 import modules
 import genTh
+import genInstr
 import sqlite3
 f=open('af_5base.txt','r')
 cdomain=[] 
@@ -81,8 +82,13 @@ for i in range(len(oupts)):
 ##    adp.show()
 ##########################
 ##threshold
-##############################
+
 th_lib=genTh.gen_th(mods)
+##############################
+##################
+##instructions
+ins=genInstr.instr(mods)
+##########
 print('used seqs',po+1)
 conn = sqlite3.connect('hardwaredb160625.sqlite')
 cur = conn.cursor()
@@ -126,6 +132,12 @@ CREATE TABLE Adaptors (
     s4 TEXT,
     s9 TEXT,
     s10 TEXT
+);
+CREATE TABLE Instr (
+    num INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
+    ins TEXT,
+    v1 TEXT,
+    v2 TEXT
 );
 CREATE TABLE Ths (
     num INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
@@ -176,4 +188,16 @@ for th in th_lib:
                 ,(i,th[0],th[1],th[2],th[3]))
     conn.commit()
     i=i+1
+i=0
+for key,val in ins.items():
+    if type(val)==type('str'):
+        cur.execute(''' INSERT OR IGNORE INTO Instr(
+            num,ins,v1) VALUES(?,?,?)''',(i,key,val))
+        conn.commit()
+        i=i+1
+    else :
+        cur.execute(''' INSERT OR IGNORE INTO Instr(
+            num,ins,v1,v2) VALUES(?,?,?,?)''',(i,key,val[0],val[1]))
+        conn.commit()
+        i=i+1
 conn.close()
