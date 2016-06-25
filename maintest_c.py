@@ -1,49 +1,41 @@
-#test function module
+#for exercise 
 #[ng,nn]=gen_lgat(1)
 #print (nn)
 
-import logicGate_c
+#generate hardware from 'ncDomain.txt'
+import logicGate
 import inpAndOupt
-import modules_c
-cdomain=['AAAAA','AAAAG','CCCCC','GGGGG','AAGGG','AACCC','CAACC']
-s1=(logicGate_c.gen_lgat(1,1,cdomain))
-s2=(logicGate_c.gen_lgat(2,2,cdomain))
-s3=(logicGate_c.gen_lgat(3,3,cdomain))
-s4=(logicGate_c.gen_lgat(4,4,cdomain))
+import modules
+import genTh
+
+
+f=open('af_5base.txt','r')
+cdomain=[] 
+po=0 #position
+
+for line in f:
+    cdomain.append(line.strip('\n'))
+    #cdomain.append(line.strip('\r'))
+print('lib length',len(cdomain))
+
+##########################
+# Logic gate
 mods=[] # for saving modules
-mods.append(s1)
-mods.append(s2)
-mods.append(s3)
-mods.append(s4)
-inpts=[]
-oupts=[]
 for i in range(4):
-    inp=inpAndOupt.gen_inp (i,cdomain)
-    inpts.append(inp)
-    oup=inpAndOupt.gen_oup (i,cdomain)
-    oupts.append(oup)
-print('************************************')
-for inp in inpts:
-    inp.show()
-print('************************************')
-for oup in oupts:
-    oup.show()
-print('************************************')
-ad1=modules_c.adap(2,3,4,0)
-ctl='CCCC'
-ad1.setCtlSeq(ctl)
-ad1.setSeq2(mods)
-ad1.show()
-print('************************************')
-ad2=modules_c.adap(1,1,2,0)
-ctl='CCCC'
-ad2.setCtlSeq(ctl)
-ad2.setSeq1(inpts,mods)
-ad2.show()
-print('************************************')
-ad3=modules_c.adap(3,1,2,0)
-ctl='CCCC'
-ad3.setCtlSeq(ctl)
-ad3.setSeq3(mods,oupts)
-ad3.show()
-print('************************************')
+    print(cdomain[po:po+5])
+    mods.append(logicGate.gen_lgat(1,i,cdomain[po:po+5]))
+    po=po+5
+
+for i in range(4):
+    mods.append(logicGate.gen_lgat(2,i+4,cdomain[po:po+5]))
+    po=po+5
+for i in range(4):
+    mods.append(logicGate.gen_lgat(3,i+8,cdomain[po:po+6]))
+    po=po+6
+for i in range(4):
+    mods.append(logicGate.gen_lgat(4,i+12,cdomain[po:po+4]))
+    po=po+4
+##for mod in mods:
+##    print (mod.out)
+th_lib=genTh.gen_th(mods)
+print (th_lib)
