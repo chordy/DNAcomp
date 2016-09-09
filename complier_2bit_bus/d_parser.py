@@ -393,7 +393,7 @@ def d_par(tokens):
         headers.append(nheader)
     elif isassign(tokens): #执行语句只有赋值语句
         nheader=ifassign(tokens)
-        header.addbchild(nheader)
+        #header.addbchild(nheader)
         root.add(nheader)
         visitassign(nheader)
         headers.append(nheader)

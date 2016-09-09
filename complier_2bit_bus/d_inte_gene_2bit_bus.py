@@ -88,7 +88,10 @@ def in_gene(headers):
             co.in1=[header.fchild[0].num,header.fchild[0].id]
             co.in2=[header.tchild[0].num,header.tchild[0].id]
             cod.append(co)
-    #print( cod_for_print)
+    print('*'*30)
+    print('intermediate code:')
+    for codd in cod_for_print:
+        print(codd)
     return cod
 
 

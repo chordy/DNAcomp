@@ -47,6 +47,33 @@ def adder(inp1,inp2,oup):
 ##        for tmp in tmp_table:
 ##            print(tmp)
         return tmp_table
+def sub(inp1,inp2,oup):
+    # 2bit data
+    global poin
+    tmp_table=[]
+    if poin['or']>1003 or poin['and']>1006 or poin['not']>1010 or poin['xor']>1015:
+        print('ERROR: Space Not Enough!!!')
+        return -1
+    else:
+        addr=[['id',poin['and']],poin['and']+1]
+        tmp_table.append([addr,[inp1[1],['id',poin['not']]],poin['and']+1])
+        poin['and']+=1
+        addr=[['id',poin['not']],poin['and']-1]
+        tmp_table.append([addr,[inp2[1]],poin['and']-1])
+        poin['not']+=1
+        addr=[['id',poin['not']],poin['or']]
+        tmp_table.append([addr,[inp2[0]],poin['or']])
+        poin['not']+=1
+        addr=[['id',poin['or']],poin['and']]
+        tmp_table.append([addr,[inp1[0],['id',poin['not']-1]],poin['and']])
+        poin['or']+=1
+        addr=[['id',poin['xor']],oup[0]]
+        tmp_table.append([addr,[inp1[0],inp2[0]],oup[0]])
+        poin['xor']+=1
+        addr=[['id',poin['and']],oup[1]]
+        tmp_table.append([addr,[['id',poin['and']-1],['id',poin['or']-1]],oup[1]])
+        poin['and']+=1
+        return tmp_table 
     
 def d_gene(incode):
     
@@ -175,11 +202,11 @@ def d_gene(incode):
             if co.type=='+':
                 
                 tmp_table.extend(adder(inp1,inp2,oup))
-            elif co[3]=='-':
-                tmp_table.extend(suber(inp1,inp2,oup))
-            elif co[3]=='*':
+            elif co.type=='-':
+                tmp_table.extend(sub(inp1,inp2,oup))
+            elif co.type=='*':
                 tmp_table.extend(mul(inp1,inp2,oup))
-            elif co[3]=='/':
+            elif co.type=='/':
                 tmp_table.extend(div(inp1,inp2,oup))
 ##        else :
 ##            addr=[poin[co[3]],co[0]]
@@ -209,7 +236,7 @@ def d_gene(incode):
         print(tmp)
     for tmp in tmp_table:
         add2=tmp[0][0][1]
-        #print((tmp))
+        print((tmp))
 ##        print(instr)
 ##        if isinstance(tmp[0][0],int):
         for i in range(len(tmp[1])):
@@ -228,18 +255,20 @@ def d_gene(incode):
                     tmpf=0 #临时flag
                     lo=0 #所在位置
                     for ins in instr:
+                        print(ins)
                         if totest in ins:
                             tmpf=1
                             break
                         else:
                             lo+=1
+                    print('lo',lo)        
                     if not tmpf :
                         instr.append(toapp)
                         instr.append('WIR1(%d,%s,%d)'%(numin,add2,i))
                         numin=numin+1
                     else:
                         #如果变量表中已经有这个变量了。
-                        instr.append('WIR1(%d,%s,%d)'%(lo,add2,i))
+                        instr.append('WIR1(%s,%s,%d)'%(ins.split(',')[1].split(')')[0],add2,i))
                     
                     
                 else:
