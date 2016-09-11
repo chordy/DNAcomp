@@ -79,6 +79,7 @@ def in_gene(headers):
             co.in2=[header.fchild[0].num,header.fchild[0].id]
             cod.append(co)
         elif header.data in ['*','/']:
+            print(header.id,header.fchild)
             a='%s  :  [%s,%s] %s [%s,%s]'%(header.id,header.fchild[0].num,header.fchild[0].id,\
                                         header.data,header.tchild[0].num,header.tchild[0].id)
             cod_for_print.append(a)

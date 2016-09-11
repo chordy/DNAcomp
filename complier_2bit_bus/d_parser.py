@@ -86,6 +86,7 @@ def ifterm(tokens):
     expr1=tokens[0:cpos]
     expr2=tokens[cpos+1:len(tokens)]
     nheader=d_ast1.Term(expr1,expr2,op)
+
     return nheader
 
 def iffactor(tokens):
@@ -100,6 +101,7 @@ def iffactor(tokens):
     expr1=tokens[0:cpos]
     expr2=tokens[cpos+1:len(tokens)]
     nheader=d_ast1.Factor(expr1,expr2,op)
+    #print(nheader.factor,nheader.ter)
     return nheader
 def ifassign(tokens):
     #print(tokens)
@@ -144,14 +146,14 @@ def isterm(tokens):
     for token in tokens:
         if token[0] in['+','-']:
             return True
-        else:
-            return False
+        
+    return False
 def isfactor(tokens):
     for token in tokens:
         if token[0] in['*','/']:
             return True
-        else:
-            return False
+        
+    return False
     
 ### 开始visit
 def visitif(header):
@@ -257,8 +259,8 @@ def visitassign(header):
     global idnum
     idnum+=1
     header.id=idnum
+    print(header.aexp)
 
-    #print(header.name)
     header.addnchild(d_ast1.node([header.name]))
     if len(header.aexp)==1:
         header.addachild(d_ast1.node(header.aexp))
@@ -274,11 +276,18 @@ def visitassign(header):
         header.addachild(nheader)
         visitlog(nheader)
         headers.append(nheader)
-    else:
+    elif isterm (header.aexp):
         nheader=ifterm(header.aexp)
         header.addachild(nheader)
         visitterm(nheader)
         headers.append(nheader)
+    elif isfactor(header.aexp):
+        nheader=iffactor(header.aexp)
+        header.addachild(nheader)
+        visitfactor(nheader)
+        headers.append(nheader)
+    else:
+        print('Operaton not defined !')
     #headers.append(header)
     return header 
 def visitrel(header):
@@ -340,6 +349,7 @@ def visitterm(header):
         visitfactor(nheader)
         headers.append(nheader)
     else:
+        
         header.addtchild(d_ast1.node(header.term))
 
     if isfactor(header.factor):
@@ -358,7 +368,7 @@ def visitfactor(header):
     header.id=idnum
     #print(header.name)
     if isfactor(header.factor):
-        nheader=ifterm(header.factor)
+        nheader=iffactor(header.factor)
         header.addfchild(nheader)
         visitfactor(nheader)
         headers.append(nheader)
@@ -413,7 +423,7 @@ def d_par(tokens):
         visitterm(nheader)
         headers.append(nheader)
     elif isfactor(tokens):
-        nheader=ifterm(tokens)
+        nheader=iffactor(tokens)
         root.add(nheader)
         visitfactor(nheader)
         headers.append(nheader)

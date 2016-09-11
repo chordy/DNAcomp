@@ -6,28 +6,15 @@ import math
 from d_inte_gene_2bit_bus import incd
 #import simple_operations as sop
 global poin
-poin={'or':1000,'and':1004,'not':1008,'xor':1012}
+poin={'or':1000,'and':1006,'not':1012,'xor':1018}
 
-##def adder(inp1,inp2,oup1):
-##    
-##    global poin 
-##    tmp_table=[]
-##    # compiling of 1bit full adder
-##    if poin['xor']>14 or poin['and']>6: # pointer for and xor
-##        print( 'ERROR: SPACE not enough')
-##        return -1
-##    else :
-##        addr=[poin['xor'],oup1]
-##        poin['xor']+=1
-##        tmp_table.append([addr,[inp1,inp2],oup1])
-##        return tmp_table
 def adder(inp1,inp2,oup):
     #2bit inp1[0] inp1[1] inp2[0] inp2[1]
     # out: oup[0] oup[1]
     global poin 
     tmp_table=[]
     # compiling of 1bit full adder
-    if poin['xor']>1013 or poin['and']>1006: # pointer for and xor
+    if poin['xor']>1021 or poin['and']>1010: # pointer for and xor
         #print(poin['xor'],poin['and'])
         print( 'ERROR: SPACE not enough')
         return -1
@@ -51,7 +38,7 @@ def sub(inp1,inp2,oup):
     # 2bit data
     global poin
     tmp_table=[]
-    if poin['or']>1003 or poin['and']>1006 or poin['not']>1010 or poin['xor']>1015:
+    if poin['or']>1006 or poin['and']>1010 or poin['not']>1016 or poin['xor']>1022:
         print('ERROR: Space Not Enough!!!')
         return -1
     else:
@@ -74,6 +61,27 @@ def sub(inp1,inp2,oup):
         tmp_table.append([addr,[['id',poin['and']-1],['id',poin['or']-1]],oup[1]])
         poin['and']+=1
         return tmp_table 
+
+def mul(inp1,inp2,oup):
+    global poin
+    tmp_table=[]
+    if poin['and']>1009 or poin['or']>1005:
+        print('ERROR: Space Not Enough!!!')
+        return -1
+    else:
+        addr=[['id',poin['and']],oup[0]]
+        tmp_table.append([addr,[inp1[0],inp2[0]],oup[0]])
+        poin['and']+=1
+        addr=[['id',poin['and']],poin['or']]
+        tmp_table.append([addr,[inp1[1],inp2[0]],poin['or']])
+        poin['and']+=1
+        addr=[['id',poin['and']],poin['or']]
+        tmp_table.append([addr,[inp1[0],inp2[1]],poin['or']])
+        poin['and']+=1
+        addr=[['id',poin['or']],oup[1]]
+        tmp_table.append([addr,[['id',poin['and']-2],['id',poin['and']-1]],oup[1]])
+        poin['or']+=1
+        return tmp_table
     
 def d_gene(incode):
     
