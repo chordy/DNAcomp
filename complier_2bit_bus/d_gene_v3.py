@@ -65,7 +65,7 @@ def sub(inp1,inp2,oup):
 def mul(inp1,inp2,oup):
     global poin
     tmp_table=[]
-    if poin['and']>1009 or poin['or']>1005:
+    if poin['and']>1009 or poin['xor']>1023:
         print('ERROR: Space Not Enough!!!')
         return -1
     else:
@@ -73,16 +73,53 @@ def mul(inp1,inp2,oup):
         tmp_table.append([addr,[inp1[0],inp2[0]],oup[0]])
         poin['and']+=1
         addr=[['id',poin['and']],poin['or']]
-        tmp_table.append([addr,[inp1[1],inp2[0]],poin['or']])
+        tmp_table.append([addr,[inp1[1],inp2[0]],poin['xor']])
         poin['and']+=1
         addr=[['id',poin['and']],poin['or']]
-        tmp_table.append([addr,[inp1[0],inp2[1]],poin['or']])
+        tmp_table.append([addr,[inp1[0],inp2[1]],poin['xor']])
         poin['and']+=1
-        addr=[['id',poin['or']],oup[1]]
+        addr=[['id',poin['xor']],oup[1]]
         tmp_table.append([addr,[['id',poin['and']-2],['id',poin['and']-1]],oup[1]])
         poin['or']+=1
         return tmp_table
-    
+def div(inp1,inp2,oup):
+    global poin
+    tmp_table=[]
+    if poin['and']>1008 or poin['or']>1005 or poin['not']>1016:
+        print('ERROR: Space Not Enough')
+        return -1
+    else:
+        addr=[['id',poin['not']],poin['and']+1]
+        tmp_table.append([addr,[inp2[1]],['id',poin['and']+1]])
+        poin['not']+=1
+        addr=[['id',poin['not']],poin['and']]
+        tmp_table.append([addr,[inp2[0]],['id',poin['and']]])
+        poin['not']+=1
+        addr=[['id',poin['and']],poin['or']+1]
+        tmp_table.append([addr,[inp2[1],['id',poin['not']-1]],poin['or']+1])
+        poin['and']+=1
+        addr=[['id',poin['and']],[poin['or'],poin['and']+1]]
+        tmp_table.append([addr,[['id',poin['not']-2],inp2[0]],[poin['or'],poin['and']+1]])
+        poin['and']+=1
+        addr=[['id',poin['or']],poin['and']+2]
+        tmp_table.append([addr,[inp1[1],['id',poin['and']-1]],poin['and']+2])
+        poin['or']+=1
+        addr=[['id',poin['or']],poin['and']+1]
+        tmp_table.append([addr,[inp1[0],['id',poin['and']-2]],poin['and']+1])
+        poin['or']+=1
+        addr=[['id',poin['and']],oup[1]]
+        tmp_table.append([addr,[inp1[1],['id',poin['and']-1]],oup[1]])
+        poin['and']+=1
+        addr=[['id',poin['and']],poin['or']]
+        tmp_table.append([addr,[inp1[1],['id',poin['or']-1]],poin['or']])
+        poin['and']+=1
+        addr=[['id',poin['and']],poin['or']]
+        tmp_table.append([addr,[['id',poin['or']-2],inp1[0]],poin['or']])
+        poin['and']+=1
+        addr=[['id',poin['or']],oup[0]]
+        tmp_table.append([addr,[['id',poin['and']-2],['id',poin['and']-1]],oup[0]])
+        poin['or']+=1
+        return tmp_table
 def d_gene(incode):
     
     tmp_table=[]
