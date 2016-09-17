@@ -59,11 +59,11 @@ def ifrel(tokens):
     return nheader
 
 def iflog(tokens):
-    #print(tokens)
+    print(tokens)
     cpos=0
     op=tokens[0][0]
     for token in tokens:
-        if token[0] in ['and','or','xor','not']:
+        if token[0] in ['and','or','xor','not','nand','nor','xnor']:
             cpos=tokens.index(token)
             op=token[0]
             
@@ -133,10 +133,11 @@ def isrel(tokens):
     return False
 def islog(tokens):
     for token in tokens:
-        if token[0] in ['and','or','xor','not']:
+        #print(token[0])
+        if token[0] in ['and','or','xor','not','nand','nor','xnor']:
             return True
-        else:
-            return False
+        
+    return False
 def isassign(tokens):
     if tokens[1][0]=='=':
         return True
@@ -259,7 +260,7 @@ def visitassign(header):
     global idnum
     idnum+=1
     header.id=idnum
-    print(header.aexp)
+    print('header.aexp:',header.aexp)
 
     header.addnchild(d_ast1.node([header.name]))
     if len(header.aexp)==1:
@@ -289,45 +290,110 @@ def visitassign(header):
     else:
         print('Operaton not defined !')
     #headers.append(header)
-    return header 
+    return header
+def visitlog(header):
+    #print(type(header))
+    global headers
+    global idnum
+    idnum+=1
+    header.id=idnum
+    print('header.aexp:',header.log1)
+    if len(header.log1)==1:
+        header.addlchild(d_ast1.node(header.log1))
+    elif isrel(header.log1):
+        print(header.log1)
+        nheader=ifrel(header.log1)
+        header.addlchild(nheader)
+        visitrel(nheader)
+        headers.append(nheader)
+    # 进入并执行新建的节点
+    elif islog (header.log1):
+        nheader=iflog(header.log1)
+        header.addlchild(nheader)
+        visitlog(nheader)
+        headers.append(nheader)
+    elif isterm (header.log1):
+        nheader=ifterm(header.log1)
+        header.addlchild(nheader)
+        visitterm(nheader)
+        headers.append(nheader)
+    elif isfactor(header.log1):
+        nheader=iffactor(header.log1)
+        header.addlchild(nheader)
+        visitfactor(nheader)
+        headers.append(nheader)
+    elif len(header.log1)==0:
+        header.addlchild([])
+    else:
+        print('Operaton not defined !')
+    #处理右分支    
+    if len(header.log2)==1:
+        header.addrchild(d_ast1.node(header.log2))
+    elif isrel(header.log2):
+        print(header.log2)
+        nheader=ifrel(header.log2)
+        header.addrchild(nheader)
+        visitrel(nheader)
+        headers.append(nheader)
+    # 进入并执行新建的节点
+    elif islog (header.log2):
+        nheader=iflog(header.log2)
+        header.addrchild(nheader)
+        visitlog(nheader)
+        headers.append(nheader)
+    elif isterm (header.log2):
+        nheader=ifterm(header.log2)
+        header.addrchild(nheader)
+        visitterm(nheader)
+        headers.append(nheader)
+    elif isfactor(header.log2):
+        nheader=iffactor(header.log2)
+        header.addrchild(nheader)
+        visitfactor(nheader)
+        headers.append(nheader)
+    else:
+        print('Operaton not defined !')
+    #headers.append(header)
+    return header
+
 def visitrel(header):
     #print(type(header))
     global headers
     global idnum
-    #print(header.name)
     idnum+=1
     header.id=idnum
-
-
+    print('header.aexp:',header.rel1)
+    if len(header.rel1)==1:
+        header.addlchild(d_ast1.node(header.rel1))
     # 进入并执行新建的节点
-    if islog (header.rel1):
-        nheader=iflog(header.rel1)
-        header.addlchild(nheader)
-        visitlog(nheader)
-        headers.append(nheader)
-    elif isterm(header.rel1):
+    elif isterm (header.rel1):
         nheader=ifterm(header.rel1)
         header.addlchild(nheader)
         visitterm(nheader)
         headers.append(nheader)
-    else:
-        header.addlchild(d_ast1.node(header.rel1))# 需要修改NODE class
-                  
-    
-    # 进入并执行新建的节点
-    if islog (header.rel2):
-        nheader=iflog(header.rel2)
-        header.addrchild(nheader)
-        visitlog(nheader)
+    elif isfactor(header.rel1):
+        nheader=iffactor(header.rel1)
+        header.addlchild(nheader)
+        visitfactor(nheader)
         headers.append(nheader)
-    elif isterm(header.rel2):
+    else:
+        print('Operaton not defined !')
+    #处理右分支    
+    if len(header.rel2)==1:
+        header.addrchild(d_ast1.node(header.rel2))
+    elif isterm (header.rel2):
         nheader=ifterm(header.rel2)
         header.addrchild(nheader)
         visitterm(nheader)
         headers.append(nheader)
+    elif isfactor(header.rel2):
+        nheader=iffactor(header.rel2)
+        header.addrchild(nheader)
+        visitfactor(nheader)
+        headers.append(nheader)
     else:
-        header.addrchild(d_ast1.node(header.rel2))# 需要修改NODE class
-    
+        print('Operaton not defined !')
+    #headers.append(header)
     return header
 
 def visitterm(header):

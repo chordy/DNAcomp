@@ -120,6 +120,238 @@ def div(inp1,inp2,oup):
         tmp_table.append([addr,[['id',poin['and']-2],['id',poin['and']-1]],oup[0]])
         poin['or']+=1
         return tmp_table
+def dand(inp1,inp2,oup):
+    global poin
+    tmp_table=[]
+    if poin['and']>1011 or poin['or']>1004:
+        print('ERROR: Space Not Enough')
+        return -1
+    else:
+        addr=[['id',poin['or']],poin['and']]
+        tmp_table.append([addr,[inp1[1],inp1[0]],['id',poin['and']]])
+        poin['or']+=1
+        addr=[['id',poin['or']],poin['and']]
+        tmp_table.append([addr,[inp2[1],inp2[0]],['id',poin['and']]])
+        poin['or']+=1
+        addr=[['id',poin['and']],oup[0]]
+        tmp_table.append([addr,[['id',poin['or']-2],['id',poin['or']-1]],oup[0]])
+        poin['and']+=1
+        return tmp_table
+def dor(inp1,inp2,oup):
+    global poin
+    tmp_table=[]
+    if poin['or']>1003:
+        print('ERROR: Space Not Enough')
+        return -1
+    else:
+        addr=[['id',poin['or']],poin['or']+2]
+        tmp_table.append([addr,[inp1[1],inp1[0]],['id',poin['or']+2]])
+        poin['or']+=1
+        addr=[['id',poin['or']],poin['or']+1]
+        tmp_table.append([addr,[inp2[1],inp2[0]],['id',poin['or']+1]])
+        poin['or']+=1
+        addr=[['id',poin['or']],oup[0]]
+        tmp_table.append([addr,[['id',poin['or']-2],['id',poin['or']-1]],oup[0]])
+        poin['or']+=1
+        return tmp_table
+def dxor(inp1,inp2,oup):
+    global poin
+    tmp_table=[]
+    if poin['or']>1004 or poin['xor']>1023:
+        print('ERROR: Space Not Enough')
+        return -1
+    else:
+        addr=[['id',poin['or']],poin['xor']]
+        tmp_table.append([addr,[inp1[1],inp1[0]],['id',poin['xor']]])
+        poin['or']+=1
+        addr=[['id',poin['or']],poin['xor']]
+        tmp_table.append([addr,[inp2[1],inp2[0]],['id',poin['xor']]])
+        poin['or']+=1
+        addr=[['id',poin['xor']],oup[0]]
+        tmp_table.append([addr,[['id',poin['or']-2],['id',poin['or']-1]],oup[0]])
+        poin['xor']+=1
+        return tmp_table
+def dnot(inp1,oup):
+    global poin
+    tmp_table=[]
+    if poin['or']>1005 or poin['not']>1017:
+        print("ERROR: Space Not Enough.")
+        return -1
+    else:
+        addr=[['id',poin['or']],poin['not']]
+        tmp_table.append([addr,[inp1[0],inp1[1]],['id',poin['not']]])
+        poin['or']+=1
+        addr=[['id',poin['not']],oup[0]]
+        tmp_table.append([addr,[['id',poin['or']-1]],oup[0]])
+        poin['not']+=1
+        return tmp_table
+def dxnor(inp1,inp2,oup):
+    global poin
+    tmp_table=[]
+    if poin['xor']>1023 or poin['or']>1004 or poin['not']>1017:
+        print('ERROR: Space Not Enough')
+        return -1
+    else:
+        addr=[['id',poin['or']],poin['xor']]
+        tmp_table.append([addr,[inp1[1],inp1[0]],['id',poin['xor']]])
+        poin['or']+=1
+        addr=[['id',poin['or']],poin['xor']]
+        tmp_table.append([addr,[inp2[1],inp2[0]],['id',poin['xor']]])
+        poin['or']+=1
+        addr=[['id',poin['xor']],['id',poin['not']]]
+        tmp_table.append([addr,[['id',poin['or']-2],['id',poin['or']-1]],['id',poin['not']]])
+        poin['xor']+=1
+        addr=[['id',poin['not']],oup[0]]
+        tmp_table.append([addr,[['id',poin['xor']-1]],oup[0]])
+        poin['not']+=1
+        return tmp_table
+def dnor(inp1,inp2,oup):
+    global poin
+    tmp_table=[]
+    if poin['or']>1003 or poin['not']>1017:
+        print('ERROR: Space Not Enough')
+        return -1
+    else:
+        addr=[['id',poin['or']],poin['or']+2]
+        tmp_table.append([addr,[inp1[1],inp1[0]],['id',poin['or']+2]])
+        poin['or']+=1
+        addr=[['id',poin['or']],poin['or']+1]
+        tmp_table.append([addr,[inp2[1],inp2[0]],['id',poin['or']+1]])
+        poin['or']+=1
+        addr=[['id',poin['or']],['id',poin['not']]]
+        tmp_table.append([addr,[['id',poin['or']-2],['id',poin['or']-1]],['id',poin['not']]])
+        poin['or']+=1
+        addr=[['id',poin['not']],oup[0]]
+        tmp_table.append([addr,[['id',poin['or']-1]],oup[0]])
+        poin['not']+=1
+        return tmp_table
+def dnand(inp1,inp2,oup):
+    global poin
+    tmp_table=[]
+    if poin['or']>1004 or poin['not']>1017 or poin['and']>1011:
+        print('ERROR: Space Not Enough')
+        return -1
+    else:
+        addr=[['id',poin['or']],poin['and']]
+        tmp_table.append([addr,[inp1[1],inp1[0]],['id',poin['and']]])
+        poin['or']+=1
+        addr=[['id',poin['or']],poin['and']]
+        tmp_table.append([addr,[inp2[1],inp2[0]],['id',poin['and']]])
+        poin['or']+=1
+        addr=[['id',poin['and']],['id',poin['not']]]
+        tmp_table.append([addr,[['id',poin['or']-2],['id',poin['or']-1]],['id',poin['not']]])
+        poin['and']+=1
+        addr=[['id',poin['not']],oup[0]]
+        tmp_table.append([addr,[['id',poin['and']-1]],oup[0]])
+        poin['not']+=1
+        return tmp_table
+def eq(inp1,inp2,oup):
+    global poin
+    tmp_table=[]
+    if poin['xor']>1022 or poin['or']>1005 or poin['not']>1017:
+        print('ERROR: Space Not Enough')
+        return -1
+    else:
+        addr=[['id',poin['xor']],poin['or']]
+        tmp_table.append([addr,[inp1[1],inp2[1]],['id',poin['or']]])
+        poin['xor']+=1
+        addr=[['id',poin['xor']],poin['or']]
+        tmp_table.append([addr,[inp1[0],inp2[0]],['id',poin['or']]])
+        poin['xor']+=1
+        addr=[['id',poin['or']],poin['not']]
+        tmp_table.append([addr,[['id',poin['xor']-2],['id',poin['xor']-1]],['id',poin['not']]])
+        poin['or']+=1
+        addr=[['id',poin['not']],oup[0]]
+        tmp_table.append([addr,[['id',poin['or']-1]],oup[0]])
+        poin['not']+=1
+        return tmp_table
+def neq(inp1,inp2,oup):
+    global poin
+    tmp_table=[]
+    if poin['xor']>1022 or poin['or']>1005:
+        print('ERROR: Space Not Enough')
+        return -1
+    else:
+        addr=[['id',poin['xor']],poin['or']]
+        tmp_table.append([addr,[inp1[1],inp2[1]],['id',poin['or']]])
+        poin['xor']+=1
+        addr=[['id',poin['xor']],poin['or']]
+        tmp_table.append([addr,[inp1[0],inp2[0]],['id',poin['or']]])
+        poin['xor']+=1
+        addr=[['id',poin['or']],oup[0]]
+        tmp_table.append([addr,[['id',poin['xor']-2],['id',poin['xor']-1]],oup[0]])
+        poin['or']+=1
+        return tmp_table
+def lthan(inp1,inp2,oup):
+    global poin
+    tmp_table=[]
+    if poin['not']>1015 or poin['or']>1005 or poin['and']>1009 or poin['xor']>1023:
+        print('ERROR: Space Not Enough')
+        return -1
+    else:
+        addr=[['id',poin['not']],poin['and']]
+        tmp_table.append([addr,[inp2[1]],['id',poin['and']]])
+        poin['not']+=1
+        addr=[['id',poin['not']],poin['and']+1]
+        tmp_table.append([addr,[inp2[0]],['id',poin['and']+1]])
+        poin['not']+=1
+        addr=[['id',poin['not']],poin['and']+2]
+        tmp_table.append([addr,[['id',poin['xor']]],['id',poin['and']+2]])
+        poin['not']+=1
+        addr=[['id',poin['and']],poin['or']]
+        tmp_table.append([addr,[inp1[1],['id',poin['not']-3]],['id',poin['or']]])
+        poin['and']+=1
+        addr=[['id',poin['xor']],poin['not']-1]
+        tmp_table.append([addr,[inp1[1],inp2[1]],['id',poin['not']-1]])
+        poin['xor']+=1
+        addr=[['id',poin['and']],poin['and']+1]
+        tmp_table.append([addr,[inp1[0],['id',poin['not']-2]],['id',poin['and']+1]])
+        poin['and']+=1
+        addr=[['id',poin['and']],poin['or']]
+        tmp_table.append([addr,[['id',poin['not']-1],['id',poin['and']-1]],['id',poin['or']]])
+        poin['and']+=1
+        addr=[['id',poin['or']],oup[0]]
+        tmp_table.append([addr,[['id',poin['and']-3],['id',poin['and']-1]],oup[0]])
+        poin['or']+=1
+        return tmp_table
+
+def sthan(inp1,inp2,oup):
+    global poin
+    tmp_table=[]
+    if poin['not']>1015 or poin['or']>1005 or poin['and']>1009 or poin['xor']>1023:
+        print('ERROR: Space Not Enough')
+        return -1
+    else:
+        addr=[['id',poin['not']],poin['and']]
+        tmp_table.append([addr,[inp1[1]],['id',poin['and']]])
+        poin['not']+=1
+        addr=[['id',poin['not']],poin['and']+1]
+        tmp_table.append([addr,[inp1[0]],['id',poin['and']+1]])
+        poin['not']+=1
+        addr=[['id',poin['not']],poin['and']+2]
+        tmp_table.append([addr,[['id',poin['xor']]],['id',poin['and']+2]])
+        poin['not']+=1
+        addr=[['id',poin['and']],poin['or']]
+        tmp_table.append([addr,[['id',poin['not']-3],inp2[1]],['id',poin['or']]])
+        poin['and']+=1
+        addr=[['id',poin['xor']],poin['not']-1]
+        tmp_table.append([addr,[inp1[1],inp2[1]],['id',poin['not']-1]])
+        poin['xor']+=1
+        addr=[['id',poin['and']],poin['and']+1]
+        tmp_table.append([addr,[['id',poin['not']-2],inp2[0]],['id',poin['and']+1]])
+        poin['and']+=1
+        addr=[['id',poin['and']],poin['or']]
+        tmp_table.append([addr,[['id',poin['not']-1],['id',poin['and']-1]],['id',poin['or']]])
+        poin['and']+=1
+        addr=[['id',poin['or']],oup[0]]
+        tmp_table.append([addr,[['id',poin['and']-3],['id',poin['and']-1]],oup[0]])
+        poin['or']+=1
+        return tmp_table
+
+
+    
+### 内部算法结束
+    
 def d_gene(incode):
     
     tmp_table=[]
@@ -221,23 +453,39 @@ def d_gene(incode):
             inp=[co.in2[1]]
             oup=co.num[1]
             tmp_table.append([addr, inp,oup])
+        elif co.type in ['and','or','xor','not','nor','xnor','nand']:
+            #逻辑运算
+            inp1=co.in1
+            inp2=co.in2
+            oup=co.num
+            if co.type=='and':
+                tmp_table.extend(dand(inp1,inp2,oup))
+            elif co.type=='or':
+                tmp_table.extend(dor(inp1,inp2,oup))
+            elif co.type=='xor':
+                tmp_table.extend(dxor(inp1,inp2,oup))
+            elif co.type=='not':
+                tmp_table.extend(dnot(inp2,oup))
+            elif co.type=='xnor':
+                tmp_table.extend(dxnor(inp1,inp2,oup))
+            elif co.type=='nand':
+                tmp_table.extend(dnand(inp1,inp2,oup))
+            elif co.type=='nor':
+                tmp_table.extend(dnor(inp1,inp2,oup))
         elif co.type in ['==','!=','>','<','>=','<=']: # 关系运算
             # not finished
             inp1=co.in1
             inp2=co.in2
-            oup=num
-            if co[3]=='==':
-                tmp_table.extend(sop.neql(inp1,inp2,oup))
-            elif co[3]=='!=':
-                tmp_table.extend(sop.neql(inp1,inp2,oup))
-            elif co[3]=='>':
-                tmp_table.extend(sop.lthan(inp1,inp2,oup))
-            elif co[3]=='<':
-                tmp_table.extend(sop.sthan(inp1,inp2,oup))
-            elif co[3]=='>=':
-                tmp_table.extend(sop.nsthan(inp1,inp2,oup))
-            elif co[3]=='<=':
-                tmp_table.extend(sop.nlthan(inp1,inp2,oup))
+            oup=co.num
+            if co.type=='==':
+                tmp_table.extend(eq(inp1,inp2,oup))
+            elif co.type=='!=':
+                tmp_table.extend(neq(inp1,inp2,oup))
+            elif co.type=='>':
+                tmp_table.extend(lthan(inp1,inp2,oup))
+            elif co.type=='<':
+                tmp_table.extend(sthan(inp1,inp2,oup))
+            
   
 
         elif co.type in ['+','-','*','/']: #算数运算

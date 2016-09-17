@@ -58,7 +58,7 @@ def in_gene(headers):
             co.in1=[header.lchild[0].num,header.lchild[0].id]
             co.in2=[header.rchild[0].num,header.rchild[0].id]
             cod.append(co)
-        elif header.data in ['and','or','xor','not']:#逻辑运算
+        elif header.data in ['and','or','xor','nor','xnor','nand']:#逻辑运算
             a='%s  :  [%s,%s] %s [%s,%s]'%(header.id,header.lchild[0].num,header.lchild[0].id,\
                                         header.data , header.rchild[0].num,header.rchild[0].id)
             cod_for_print.append(a)
@@ -66,6 +66,14 @@ def in_gene(headers):
             co.num=header.id
             co.type=header.data
             co.in1=[header.lchild[0].num,header.lchild[0].id]
+            co.in2=[header.rchild[0].num,header.rchild[0].id]
+            cod.append(co)
+        elif header.data=='not':
+            a='%s  : %s [%s,%s]'%(header.id,header.data , header.rchild[0].num,header.rchild[0].id)
+            cod_for_print.append(a)
+            co=incd()
+            co.num=header.id
+            co.type=header.data
             co.in2=[header.rchild[0].num,header.rchild[0].id]
             cod.append(co)
         elif header.data in ['+','-']: #

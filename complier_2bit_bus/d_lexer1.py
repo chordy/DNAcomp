@@ -1,7 +1,7 @@
 #产生tokens流
 def d_lex(characters):
     reserved=['==','=','(',')',';','+','-','*','/','<=','>=','!=',':',\
-              '<','>','and','or','xor','not','for','while','if','else']
+              '<','>','and','or','xor','not','nand','nor','xnor','for','while','if','else']
     chas=characters.split()
     tokens=[]
     for cha in chas :
