@@ -42,7 +42,7 @@ def ifwhil(tokens):
     body=tokens[cpos+1:len(tokens)]
     
     nheader=d_ast1.Whil(condition, body)
-    print(nheader)
+    #print(nheader)
     return nheader
 def ifrel(tokens):
     #print(tokens)
@@ -59,7 +59,7 @@ def ifrel(tokens):
     return nheader
 
 def iflog(tokens):
-    print(tokens)
+    #print(tokens)
     cpos=0
     op=tokens[0][0]
     for token in tokens:
@@ -82,7 +82,7 @@ def ifterm(tokens):
         if token[0] in['+','-']:
             cpos=tokens.index(token)
             op=token[0]
-            break
+            #break
     expr1=tokens[0:cpos]
     expr2=tokens[cpos+1:len(tokens)]
     nheader=d_ast1.Term(expr1,expr2,op)
@@ -209,11 +209,44 @@ def visitfor(header):
     idnum+=1
     header.id=idnum
     #print(type(header))
-    
+    for_change=''
+    ini=''
+    tmp=[]
     if isassign(header.body): #执行语句只有一句赋值语句
+        bodies=[]
+        
+
         for i in range(header.strt,header.stp+1):
-            tmp=header.body
-            nheader=ifassign(header.body)
+            tmp=header.body[:]
+            print('ini',ini)
+            ini=tmp[2]
+            if i==0:
+                
+                tmp[0][1]=tmp[0][1]+'1'
+                #print(tmp)
+                for_change=tmp[0]
+                bodies.append(tmp)
+##            elif i<header.stp:
+##                for tm in tmp[2:len(tmp)]:
+##                    if tm==ini:
+##                        pos=tmp.index(tm)
+##                        tmp[pos]=for_change
+##                tmp[0][1]=tmp[0][1]+'_1'
+##                for_change=tmp[0]    
+##                print(tmp)
+##                bodies.append(tmp)
+               
+            elif i==header.stp:
+                #print(for_change,ini)
+                for tm in tmp[2:len(tmp)]:
+                    if tm==ini:
+                        pos=tmp.index(tm)
+                        tmp[pos]=for_change
+                tmp[0]=ini
+                bodies.append(tmp)
+        print(bodies)
+        for body in bodies:
+            nheader=ifassign(body)
             header.addchild(nheader)
             visitassign(nheader)
             headers.append(nheader)
@@ -260,13 +293,13 @@ def visitassign(header):
     global idnum
     idnum+=1
     header.id=idnum
-    print('header.aexp:',header.aexp)
+    #print('header.aexp:',header.aexp)
 
     header.addnchild(d_ast1.node([header.name]))
     if len(header.aexp)==1:
         header.addachild(d_ast1.node(header.aexp))
     elif isrel(header.aexp):
-        print(header.aexp)
+        #print(header.aexp)
         nheader=ifrel(header.aexp)
         header.addachild(nheader)
         visitrel(nheader)
@@ -297,11 +330,11 @@ def visitlog(header):
     global idnum
     idnum+=1
     header.id=idnum
-    print('header.aexp:',header.log1)
+    #print('header.aexp:',header.log1)
     if len(header.log1)==1:
         header.addlchild(d_ast1.node(header.log1))
     elif isrel(header.log1):
-        print(header.log1)
+        #print(header.log1)
         nheader=ifrel(header.log1)
         header.addlchild(nheader)
         visitrel(nheader)
@@ -330,7 +363,7 @@ def visitlog(header):
     if len(header.log2)==1:
         header.addrchild(d_ast1.node(header.log2))
     elif isrel(header.log2):
-        print(header.log2)
+        #print(header.log2)
         nheader=ifrel(header.log2)
         header.addrchild(nheader)
         visitrel(nheader)
@@ -362,7 +395,7 @@ def visitrel(header):
     global idnum
     idnum+=1
     header.id=idnum
-    print('header.aexp:',header.rel1)
+    #print('header.aexp:',header.rel1)
     if len(header.rel1)==1:
         header.addlchild(d_ast1.node(header.rel1))
     # 进入并执行新建的节点
@@ -402,7 +435,7 @@ def visitterm(header):
     global idnum
     idnum+=1
     header.id=idnum
-    
+    #print('header.factor',header.factor)
     if isterm(header.term):
         nheader=ifterm(header.term)
         header.addtchild(nheader)

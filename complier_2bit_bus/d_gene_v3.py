@@ -72,15 +72,15 @@ def mul(inp1,inp2,oup):
         addr=[['id',poin['and']],oup[0]]
         tmp_table.append([addr,[inp1[0],inp2[0]],oup[0]])
         poin['and']+=1
-        addr=[['id',poin['and']],poin['or']]
+        addr=[['id',poin['and']],poin['xor']]
         tmp_table.append([addr,[inp1[1],inp2[0]],poin['xor']])
         poin['and']+=1
-        addr=[['id',poin['and']],poin['or']]
+        addr=[['id',poin['and']],poin['xor']]
         tmp_table.append([addr,[inp1[0],inp2[1]],poin['xor']])
         poin['and']+=1
         addr=[['id',poin['xor']],oup[1]]
         tmp_table.append([addr,[['id',poin['and']-2],['id',poin['and']-1]],oup[1]])
-        poin['or']+=1
+        poin['xor']+=1
         return tmp_table
 def div(inp1,inp2,oup):
     global poin
@@ -357,7 +357,7 @@ def d_gene(incode):
     tmp_table=[]
     tmp_ins=[]# 暂存指令
     instr=[] #存放最终产生的指令
-    idnum=len(incode)
+    idnum=len(incode)*2
     global poin
     #当前指针
     var=[] #暂时存放输出变量，直到最后要求输出那个再输出
@@ -425,16 +425,16 @@ def d_gene(incode):
         #print(co,len(co))
         if co.type=='if':#对if语句的拆解
             tmp_ins.append(['FLAG',co.in2[0],co.in1[0]])
-            
+            tmp_ins.append(['FLAG',co.in2[1],co.in1[0]])
+            print(co.num,co.type ,co.in1 ,co.in2, co.in3 )
             
             inp=[co.in1[0]]
-            
-            oup='[id,%d]'%idnum
-            addr=[poin['not'],str(idnum)] #addr 用来建立输入与输出之间的联络，暂存于tmp_table
+            addr=[['id',poin['not']],idnum] #addr 用来建立输入与输出之间的联络，暂存于tmp_table
             poin['not']=poin['not']+1 #指针移动，无法判断是否走过了
             idnum=idnum+1
-            tmp_table.append([addr, inp,oup])
-            tmp_ins.append(['FLAG',co.in3[0],oup])
+            tmp_table.append([addr, inp,idnum])
+            tmp_ins.append(['FLAG',co.in3[0],['id',poin['not']-1]])
+            tmp_ins.append(['FLAG',co.in3[1],['id',poin['not']-1]])
         elif co.type=='while': # 对while句的拆解
             addr=poin['whil']
         elif co.type=='=': #赋值语句
@@ -512,31 +512,41 @@ def d_gene(incode):
     #处理FLAG部分
     for ins in tmp_ins:
         if ins[0]=='FLAG':
-            id1=(re.findall('[0-9]+',ins[1]))[0]
-            id2=(re.findall('[0-9]+',ins[2]))[0]
-            #print((id1))
+            print(ins)
+            id1=ins[1][1]
+            id2=ins[2][1]
+            print((id1))
+            if id2>100:
+                addr2=id2
+            else:
+                for tmp in tmp_table:
+                    oid1=tmp[0][1]
+                    if id2==oid1:
+                        addr2=tmp[0][0]
             for tmp in tmp_table:
                 oid1=tmp[0][1]
                 
                 if id1==oid1:
+                    print(oid1,id1,id2)
                     addr1=tmp[0][0]
-                elif id2==oid1:
-                    addr2=tmp[0][0]
-        instr.append(['FLAG',addr1,addr2])
+##                elif id2==oid1:
+##                    addr2=tmp[0][0]
+            print(addr1,addr2)
+            instr.append(['FLAG',addr1,addr2])
     #处理临时表
     print('tmp table')
     for tmp in tmp_table:
         print(tmp)
     for tmp in tmp_table:
         add2=tmp[0][0][1]
-        print((tmp))
+##        print((tmp))
 ##        print(instr)
 ##        if isinstance(tmp[0][0],int):
         for i in range(len(tmp[1])):
             #两个input
 ##            print('****')
 ##            print(tmp[1][i])
-            if 'id' in tmp[1][i]: #输入中包含id的
+            if 'id' in tmp[1][i] and 'var' not in tmp[0][0]: #输入中包含id的
                 add1=tmp[1][i][1]
                 #print('add1',add1)
                 if type(add1)==str:
@@ -548,28 +558,29 @@ def d_gene(incode):
                     tmpf=0 #临时flag
                     lo=0 #所在位置
                     for ins in instr:
-                        print(ins)
+                        #print(ins)
                         if totest in ins:
                             tmpf=1
                             break
                         else:
                             lo+=1
-                    print('lo',lo)        
+                    #print('lo',lo)        
                     if not tmpf :
                         instr.append(toapp)
                         instr.append('WIR1(%d,%s,%d)'%(numin,add2,i))
                         numin=numin+1
                     else:
                         #如果变量表中已经有这个变量了。
-                        instr.append('WIR1(%s,%s,%d)'%(ins.split(',')[1].split(')')[0],add2,i))
+                        instr.append('WIR1(%d,%s,%d)'%(int(ins.split(',')[1].split(')')[0]),add2,i))
                     
                     
                 else:
                     #在临时表中寻找输出的位置
                     for ntmp in tmp_table:
-                        oid1=ntmp[0][0][1]
+                        oid1=ntmp[0][0][1] #地址直接以端口号表示
+                        oid2=ntmp[0][1]  # 地址以程序编号表示
                         #print(oid1,add1)
-                        if oid1==add1:
+                        if oid1==add1 or oid2==add1:
                             instr.append('WIR2(%s,%s,%d)'%(ntmp[0][0][1],add2,i))
                             #print('WIR2(%s,%s,%d)'%(ntmp[0][0],add2,i))
                             break
@@ -577,8 +588,8 @@ def d_gene(incode):
             elif 'num'in tmp[1][i]:
                 num=tmp[1][i][1]
                 instr.append('WIR1([num,%d],%s,%d)'%(num,add2,i))
-            else :
-                print('error')
+##            else :
+##                print('error')
 ##            print(tmp)
 ##            print(instr)
         vi=0
@@ -589,16 +600,49 @@ def d_gene(incode):
 ##        print(va)
         if 'id' in va['value']:
             vid=va['value'][1]
+            f=0
             for tmp in tmp_table:
                 oid1=tmp[0][1]
                 if oid1==vid:
-                    instr.append('VAR(%s,%s,%d)'%(va['id'][1],tmp[0][0][1],vi))
+                    instr.append('VAR(%s,%s,%d)'%(va['id'][1],tmp[0][0][1],vi-1))
+                    f=1
                     break
+            if f==0:
+                instr.append('VAR(%s,%s,%d)'%(va['id'][1],va['value'],vi-1))
         else:
-            instr.append('VAR(%s,%s,%d)'%(va['id'][1],va['value'][1],vi))
+            instr.append('VAR(%s,%s,%d)'%(va['id'][1],va['value'][1],vi-1))
             
     
     print()
+    #inp与var的连接
+    pos=[]
+    for ins in instr:
+        if 'INP' in ins:
+            i_name=ins.split('(')[1].split(',')[0]
+            i_po=ins.split(',')[1].split(')')[0] # 在input寄存器中的位置
+            for inn in instr[0:len(instr)-2]:
+                if 'VAR' in inn:
+                    v_name=inn.split('(')[1].split(',')[0]
+                    v_f=inn.split(',')[1]
+                    if i_name==v_name:
+                        
+                        pos.append(instr.index(inn))
+                        pos.append(instr.index(ins))
+                        for inns in instr:
+                            if ('WIR1' in inns ):
+                                f=inns.split('(')[1].split(',')[0]
+                                
+                                if f==i_po:
+                                    t=inns.split(',')[1]
+                                    pnum=inns.split(',')[2].split(')')[0]
+                                    po=instr.index(inns)
+                                    
+                                    instr[po]='WIR2(%s,%s,%s)'%(v_f,t,pnum)
+    nins=[]
+    for ins in instr:
+        if instr.index(ins) not in pos:
+            nins.append(ins)
+            print(ins)
     return instr
 
 ###
