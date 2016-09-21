@@ -14,13 +14,13 @@ def instr(mods):
         #print (mods[i].typ)
         if mods[i].typ=='and':
             #print(mods[i].inp)
-            key='INP(%d,%d)' %(i,0)
+            key='INP(%d,%d)' %(mods[i].num,0)
             cin=mods[i].inp[0]
             v1=cal+alpha+cal+cin[0]+cg+gamma+cg
             v2=cal+alpha+cal+cin[1]+cg+gamma+cg
             value=[v1,v2]
             ins[key]=value
-            key='INP(%d,%d)' %(i,1)
+            key='INP(%d,%d)' %(mods[i].num,1)
             cin=mods[i].inp[1]
             v1=cal+alpha+cal+cin[0]+cg+gamma+cg
             v2=cal+cin[1]+cg+gamma+cg
@@ -29,13 +29,13 @@ def instr(mods):
 
         if mods[i].typ=='or':
             #print(mods[i].inp)
-            key='INP(%d,%d)' %(i,0)
+            key='INP(%d,%d)' %(mods[i].num,0)
             cin=mods[i].inp[0]
             v1=cal+alpha+cal+cin[0]+cg+gamma+cg
             v2=cal+alpha+cal+cin[1]+cg+gamma+cg
             value=[v1,v2]
             ins[key]=value
-            key='INP(%d,%d)' %(i,1)
+            key='INP(%d,%d)' %(mods[i].num,1)
             cin=mods[i].inp[1]
             v1=cal+cin[0]+cg+gamma+cg
             v2=cal+alpha+cal+cin[1]+cg+gamma+cg
@@ -44,13 +44,13 @@ def instr(mods):
 
         if mods[i].typ=='xor':
             #print(mods[i].inp)
-            key='INP(%d,%d)' %(i,0)
+            key='INP(%d,%d)' %(mods[i].num,0)
             cin=mods[i].inp[0]
             v1=cal+alpha+cal+cin[0]+cg+gamma+cg
             v2=cal+alpha+cal+cin[1]+cg+gamma+cg
             value=[v1,v2]
             ins[key]=value
-            key='INP(%d,%d)' %(i,1)
+            key='INP(%d,%d)' %(mods[i].num,1)
             cin=mods[i].inp[1]
             v1=cal+cin[0]+cg+gamma+cg
             v2=cal+cin[1]+cg+gamma+cg
@@ -59,7 +59,7 @@ def instr(mods):
 
         if mods[i].typ=='not':
             #print(mods[i].inp)
-            key='INP(%d,%d)' %(i,0)
+            key='INP(%d,%d)' %(mods[i].num,0)
             cin=mods[i].inp[0]
             v1=cal+alpha+cal+cin[0]+cg+gamma+cg
             v2=cal+alpha+cal+cin[1]+cg+gamma+cg
@@ -68,18 +68,18 @@ def instr(mods):
     for i in range(l):
         for j in range(l):
             if i !=j:
-                key='WIR1(%d,%d,0)'%(i,j)
-                value='adp1(%d,%d,0)'%(i,j)
+                key='WIR1(%d,%d,0)'%(mods[i].num,mods[j].num)
+                value='adp1(%d,%d,0)'%(mods[i].num,mods[j].num)
                 ins[key]=value
                 if mods[j].typ !='not':
-                    key='WIR1(%d,%d,1)'%(i,j)
-                    value='adp1(%d,%d,1)'%(i,j)
+                    key='WIR1(%d,%d,1)'%(mods[i].num,mods[j].num)
+                    value='adp1(%d,%d,1)'%(mods[i].num,mods[j].num)
                     ins[key]=value
     for i in range(l):
         for j in range(4):
             if i !=j:
-                key='WIR2(%d,%d,0)'%(i,j)
-                value='adp2(%d,%d,0)'%(i,j)
+                key='WIR2(%d,%d,0)'%(mods[i].num,mods[j].num)
+                value='adp2(%d,%d,0)'%(mods[i].num,mods[j].num)
                 ins[key]=value
     return ins
         

@@ -75,11 +75,12 @@ for i in range(len(oupts)):
        ad1.num=adpnum
        adps.append(ad1)
        adpnum+=1
+
        
 ##for adp in adps:
 ##    adp.show()
 print('used seqs',po+1)
-conn = sqlite3.connect('hardwaredb.sqlite')
+conn = sqlite3.connect('hardwaredb0921.sqlite')
 cur = conn.cursor()
 cur.executescript('''
 DROP TABLE IF EXISTS Ouputs;

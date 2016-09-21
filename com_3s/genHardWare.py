@@ -52,19 +52,61 @@ for i in range(4):
 ##for oup in oupts:
 ##    oup.show()
 ###################
+## 160921 新加2个logic gate
+for i in range(2):
+    mods.append(logicGate.gen_lgat(1,i+16,cdomain[po:po+5]))
+    po=po+5
+
+for i in range(2):
+    mods.append(logicGate.gen_lgat(2,i+18,cdomain[po:po+5]))
+    po=po+5
+for i in range(2):
+    mods.append(logicGate.gen_lgat(3,i+20,cdomain[po:po+6]))
+    po=po+6
+for i in range(2):
+    mods.append(logicGate.gen_lgat(4,i+22,cdomain[po:po+4]))
+    po=po+4
+
+#重新整理logic gate的编号
+inum=0
+nmods=[]
+for mod in mods:
+    if mod.typ=='or':
+       mod.num=inum+1000
+       nmods.append(mod)
+       inum+=1
+for mod in mods:
+    if mod.typ=='and':
+       mod.num=inum+1000
+       nmods.append(mod)
+       inum+=1
+for mod in mods:
+    if mod.typ=='not':
+       mod.num=inum+1000
+       nmods.append(mod)
+       inum+=1
+for mod in mods:
+    if mod.typ=='xor':
+       mod.num=inum+1000
+       nmods.append(mod)
+       inum+=1
+mods=nmods
+##for mod in mods:
+##    print(mod.num)
+##160921结束
 # ADPs
 adps=[]
 adpnum=0
 for i in range(len(mods)):
     for j in range (len(mods)):
         if i !=j:
-           ad1=modules.adap(1,i,j,0)
+           ad1=modules.adap(1,1000+i,1000+j,0)
            ad1.setSeq1(mods)
            ad1.num=adpnum
            adps.append(ad1)
            adpnum+=1
            if mods[j].typ !='not':
-               ad2=modules.adap(1,i,j,1)
+               ad2=modules.adap(1,1000+i,1000+j,1)
                ad2.setSeq1(mods)
                ad2.num=adpnum
                adps.append(ad2)
@@ -72,7 +114,7 @@ for i in range(len(mods)):
 
 for i in range(len(oupts)):
     for j in range (len(mods)):
-       ad1=modules.adap(2,j,i,0)
+       ad1=modules.adap(2,1000+j,i,0)
        ad1.setSeq2(mods,oupts)
        ad1.num=adpnum
        adps.append(ad1)
@@ -89,8 +131,10 @@ th_lib=genTh.gen_th(mods)
 ##instructions
 ins=genInstr.instr(mods)
 ##########
-print('used seqs',po+1)
-conn = sqlite3.connect('hardwaredb160625.sqlite')
+
+
+print('used seqs',po)
+conn = sqlite3.connect('hardwaredb160921.sqlite')
 cur = conn.cursor()
 cur.executescript('''
 DROP TABLE IF EXISTS Ouputs;
