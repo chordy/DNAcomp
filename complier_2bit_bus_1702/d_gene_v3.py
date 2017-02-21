@@ -348,15 +348,16 @@ def sthan(inp1,inp2,oup):
         poin['or']+=1
         return tmp_table
 
-def fac(inp1,inp2,oup):
+def fac(inp1,inp2,oup):#因式分解
     global poin
     tmp_table=[]
     if poin['not']>1015 or poin['or']>1004 or poin['and']>1007 or poin['xor']>1023:
         print('ERROR: Space Not Enough')
         return -1
     else:
-        addr=[['id',poin['and']],oup[2]] #针对于一个gate的out
-        tmp_table.append([addr,[inp2[1],inp1[1]],oup[2]])
+        addr=[['id',poin['and']],oup[1][0]+2] #针对于一个gate的out
+        #print(oup[1][0]+2)
+        tmp_table.append([addr,[inp2[1],inp1[1]],oup[1][0]+2])
         poin['and']+=1
         addr=[['id',poin['and']],poin['and']+1]
         tmp_table.append([addr,[inp2[0],inp1[1]],['id',poin['and']+1]])
@@ -366,8 +367,8 @@ def fac(inp1,inp2,oup):
         poin['not']+=1
         addr=[['id',poin['or']],poin['not']+1]#fanout 的编译
         tmp_table.append([addr,[inp1[1],inp1[0]],['id',poin['not']+1]])
-        addr=[['id',poin['or']],oup[4]]
-        tmp_table.append([addr,[inp1[1],inp1[0]],oup[4]])
+        addr=[['id',poin['or']],oup[2][0]+4]
+        tmp_table.append([addr,[inp1[1],inp1[0]],oup[2][0]+4])
         poin['or']+=1
         addr=[['id',poin['not']],poin['and']]
         tmp_table.append([addr,[inp1[0]],['id',poin['and']]])
@@ -375,20 +376,24 @@ def fac(inp1,inp2,oup):
         addr=[['id',poin['and']],poin['or']]
         tmp_table.append([addr,[['id',poin['and']-1],['id',poin['not']-1]],['id',poin['or']]])
         poin['and']+=1
-        addr=[['id',poin['or']],oup[3]]
-        tmp_table.append([addr,[['id',poin['and']-1],['id',poin['not']-2]],oup[3]])
+        addr=[['id',poin['or']],oup[1][1]+2]
+        tmp_table.append([addr,[['id',poin['and']-1],['id',poin['not']-2]],oup[1][1]+2])
         poin['or']+=1
         addr=[['id',poin['not']],poin['and']]
         tmp_table.append([addr,[['id',poin['or']-2]],['id',poin['and']]])
         poin['not']+=1
-        addr=[['id',poin['and']],oup[5]]
-        tmp_table.append([addr,[inp2[1],['id',poin['not']-1]],oup[5]])
+        addr=[['id',poin['and']],oup[2][1]+4]
+        tmp_table.append([addr,[inp2[1],['id',poin['not']-1]],oup[2][1]+4])
         addr=[['id',poin['and']],poin['and']+1]
         tmp_table.append([addr,[inp2[1],['id',poin['not']-1]],['id',poin['and']+1]])
         poin['and']+=1
-        addr=[['id',poin['and']],oup[6]]
-        tmp_table.append([addr,[['id',poin['and']-1],inp2[0]],oup[6]])
+        addr=[['id',poin['and']],oup[3][0]+6]
+        tmp_table.append([addr,[['id',poin['and']-1],inp2[0]],oup[3][0]+6])
         poin['and']+=1
+        addr=[['num',1],oup[0][0]]
+        tmp_table.append([addr,[],oup[0][0]])
+        addr=[['num',inp1[0]],oup[0][1]]
+        tmp_table.append([addr,[],oup[0][1]])
         return tmp_table
 
     
@@ -413,6 +418,7 @@ def d_gene(incode):
     #############
     ##把每一句拆成2bit格式的    
     nincode=[] # new generated code
+
     for cod in incode:
         ncod=incd()
         ncod.num=[cod.num*2-1,cod.num*2]
@@ -462,13 +468,75 @@ def d_gene(incode):
     for co in nincode:
         print(co.num,co.type ,co.in1 ,co.in2, co.in3 ) 
     #####拆分结束
+    ### 因式分解也可以正常拆分，不识别type
     ####对新的incode进行分析
     for co in nincode:
-        #print(co,len(co))
+        if co.type=='<=': #传递语句
+            print(co)
+            addr=['var %d'%varpoi,co.num[0]]
+            var[varpoi]['id']=['id', 'b0_1']
+            var[varpoi]['value']=co.in2[0]
+            
+            varpoi+=1
+            inp=[co.in2[0]]
+            oup=co.num[0]
+            tmp_table.append([addr, inp,oup])
+            
+            addr=['var %d'%varpoi,co.num[0]+1]
+            var[varpoi]['id']=['id', 'b0_0']
+            var[varpoi]['value']=['id',4]
+            varpoi+=1
+            inp=[['id',4]]
+            oup=co.num[0]+1
+            tmp_table.append([addr, inp,oup])
+            print([addr, inp,oup])
+            
+            addr=['var %d'%varpoi,co.num[0]+2]
+            var[varpoi]['id']=['id', 'b1_2']
+            var[varpoi]['value']=['id',5]
+            varpoi+=1
+            inp=[['id',5]]
+            oup=co.num[0]+2
+            tmp_table.append([addr, inp,oup])
+            print([addr, inp,oup])
+            
+            addr=['var %d'%varpoi,co.num[0]+3]
+            var[varpoi]['id']=['id', 'b1_1']
+            var[varpoi]['value']=['id',6]
+            varpoi+=1
+            inp=[['id',6]]
+            oup=co.num[0]+3
+            tmp_table.append([addr, inp,oup])
+            print([addr, inp,oup])
+            addr=['var %d'%varpoi,co.num[0]+4]
+            var[varpoi]['id']=['id', 'b1_0']
+            var[varpoi]['value']=['id',7]
+            varpoi+=1
+            inp=[['id',7]]
+            oup=co.num[0]+4
+            tmp_table.append([addr, inp,oup])
+            print([addr, inp,oup])
+            addr=['var %d'%varpoi,co.num[0]+5]
+            var[varpoi]['id']=['id', 'b2_1']
+            var[varpoi]['value']=['id',8]
+            varpoi+=1
+            inp=[['id',8]]
+            oup=co.num[0]+5
+            tmp_table.append([addr, inp,oup])
+            print([addr, inp,oup])
+            addr=['var %d'%varpoi,co.num[0]+6]
+            var[varpoi]['id']=['id', 'b2_0']
+            var[varpoi]['value']=['id',9]
+            varpoi+=1
+            inp=[['id',9]]
+            oup=co.num[0]+6
+            tmp_table.append([addr, inp,oup])
+            print([addr, inp,oup])
+            
         if co.type=='if':#对if语句的拆解
             tmp_ins.append(['FLAG',co.in2[0],co.in1[0]])
             tmp_ins.append(['FLAG',co.in2[1],co.in1[0]])
-            print(co.num,co.type ,co.in1 ,co.in2, co.in3 )
+            #print(co.num,co.type ,co.in1 ,co.in2, co.in3 )
             
             inp=[co.in1[0]]
             addr=[['id',poin['not']],idnum] #addr 用来建立输入与输出之间的联络，暂存于tmp_table
@@ -543,6 +611,13 @@ def d_gene(incode):
                 tmp_table.extend(mul(inp1,inp2,oup))
             elif co.type=='/':
                 tmp_table.extend(div(inp1,inp2,oup))
+        elif co.type=='@':#分解因式
+            inp1=co.in1
+            inp2=co.in2
+            oup=co.num
+            tmp_table.extend(fac(inp1,inp2,[oup,oup,oup,oup]))
+       
+
 ##        else :
 ##            addr=[poin[co[3]],co[0]]
 ##            poin[co[3]]=poin[co[3]]+1
