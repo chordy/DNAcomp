@@ -104,7 +104,7 @@ def gen_lgat(typ,num,cdomain):
         rs3=cal+alpha+cal+cdomain[0]+cg+gamma+cg #in=0
         s3=rec.rev_comp(rs3)
         s4= cg+cdomain[3]+cal+alpha+cal+cdomain[0]+cg #o=1
-        rs1=cal+alpha+cal+cdomain[2]+cg+gamma+cg #in=1
+        rs1=cal+alpha+cal+cdomain[1]+cg+gamma+cg #in=1
         s1=rec.rev_comp(rs1)
         s2= cg+cdomain[2]+cal+alpha+cal+cdomain[1]+cg #o=0
         in0=[cdomain[0],cdomain[1]]

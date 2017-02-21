@@ -17,17 +17,17 @@ print('lib length',len(cdomain))
 ##########################
 # Logic gate
 mods=[] # for saving modules
-for i in range(4):
+for i in range(4): #and
     mods.append(logicGate.gen_lgat(1,i,cdomain[po:po+5]))
     po=po+5
 
-for i in range(4):
+for i in range(4):  #or
     mods.append(logicGate.gen_lgat(2,i+4,cdomain[po:po+5]))
     po=po+5
-for i in range(4):
+for i in range(4): #xor
     mods.append(logicGate.gen_lgat(3,i+8,cdomain[po:po+6]))
     po=po+6
-for i in range(4):
+for i in range(4): #not
     mods.append(logicGate.gen_lgat(4,i+12,cdomain[po:po+4]))
     po=po+4
 ##for mod in mods:
@@ -134,7 +134,7 @@ ins=genInstr.instr(mods)
 
 
 print('used seqs',po)
-conn = sqlite3.connect('hardwaredb160921.sqlite')
+conn = sqlite3.connect('hardwaredb160927.sqlite')
 cur = conn.cursor()
 cur.executescript('''
 DROP TABLE IF EXISTS Ouputs;
